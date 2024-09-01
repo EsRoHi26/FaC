@@ -4,6 +4,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
+import { DrawerStatusContext } from '@react-navigation/drawer';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -12,17 +13,24 @@ export default function TabLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer>
         <Drawer.Screen
-          name="test" // This is the name of the page and must match the url from root
+          name="EWallet" // This is the name of the page and must match the url from root
           options={{
-            drawerLabel: 'Home',
-            title: 'overview',
+            drawerLabel: 'E-Wallet',
+            title: 'E-Wallet',
           }}
         />
         <Drawer.Screen
           name="index" // This is the name of the page and must match the url from root
           options={{
-            drawerLabel: 'Main',
-            title: 'Main',
+            drawerLabel: 'Donaciones',
+            title: 'Donaciones',
+          }}
+        />
+        <Drawer.Screen
+          name= "MyPro"
+          options={{
+            drawerLabel: 'Mis Proyectos',
+            title: 'Mis Proyectos',
           }}
         />
       </Drawer>

@@ -1,30 +1,36 @@
-import { StyleSheet } from 'react-native';
-import { Text, View } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
+import { Button, Card } from '@rneui/base';
+import { Link } from 'expo-router';
 
 
 export default function HomeScreen() {
   return (
     <View>
-      <Text>Principal</Text>
+      <View style={{ height: 700 }}>
+        <ScrollView>
+          {Array.from({ length: 10 }).map((_, i) => (
+            <Link href={{
+              pathname: "/pPage",
+              params: { id: i }
+            }} key={i} asChild>
+              <Pressable>
+                <Card key={i}>
+                  <Card.Title>Nombre del Proyecto</Card.Title>
+                  <Card.Divider />
+                  <Card.Image source={{ uri: 'https://picsum.photos/200/300' }} />
+                  <Text>Descripción del proyecto {i}</Text>
+                </Card>
+              </Pressable>
+            </Link>
+          ))}
+        </ScrollView>
+      </View>
+      <View style={{ width: 200, alignContent: 'center', marginHorizontal: 110, marginTop: 20 }}>
+        <Button title="solid">Historial</Button>
+      </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+
