@@ -4,24 +4,33 @@ import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 const TestPage: React.FC = () => {
-    const [monto, setMonto] = React.useState("");
+    const [monto, setMonto] = React.useState("0");
+   // let montoTxt = "1000"
+    const [montoTxt, setMontoTxt] = React.useState("1000");
+
+    const add = () => {
+        const newMontoTxt = (parseInt(monto) + parseInt(montoTxt)).toString();
+        setMontoTxt(newMontoTxt);
+        console.log(newMontoTxt);
+    }
+
     return (
         <View>
             <Card>
-                <Card.Title>Monto actual</Card.Title>
+                <Card.Title><Text style={{fontSize:25, textDecorationStyle: 'double'}}>Monto actual</Text></Card.Title>
                 <Card.Divider />
-                <Text style={{ fontSize: 50, marginHorizontal: 100 }}>$1000</Text>
+                <Text style={{ fontSize: 50, marginHorizontal: 100 }}>${montoTxt}</Text>
             </Card>
             <View style={{ width: 200, alignContent: 'center', marginHorizontal: 110, marginTop: 20 }}>
                 <TextInput
                     style={styles.input}
                     placeholder="Añade un monto"
-                    value={monto.toString()}
+                    value={monto}
                     onChangeText={setMonto}
                 ></TextInput>
             </View>
             <View style={{ width: 200, alignContent: 'center', marginHorizontal: 110, marginTop: 20 }}>
-                <Button title="solid"><Text style={{ fontSize: 40, color: "white" }}>+</Text></Button>
+                <Button title="solid" onPress={add}><Text style={{ fontSize: 40, color: "white" }}>+</Text></Button>
             </View>
         </View>
     );

@@ -11,7 +11,7 @@ export default function ProyectScreen() {
                 <ScrollView>
                     {Array.from({ length: 10 }).map((_, i) => (
                         <Link href={{
-                            pathname: "./mpPage",
+                            pathname: "/mpPage",
                             params: { id: i }
                         }} key={i} asChild>
                             <Pressable>
