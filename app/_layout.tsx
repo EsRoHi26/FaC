@@ -33,6 +33,7 @@ export default function RootLayout() {
         <Stack.Screen name="(paginas)" options={{ headerShown: false }} />
         <Stack.Screen name="mpPage" options={{title: "Mis proyectos"}} />
         <Stack.Screen name="pPage" options={{title: "Donar"}} />
+        <Stack.Screen name="nProject" options={{title: "Nuevo proyecto"}} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>

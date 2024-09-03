@@ -26,9 +26,24 @@ export default function ProyectScreen() {
                     ))}
                 </ScrollView>
             </View>
-            <View style={{ width: 200, alignContent: 'center', marginHorizontal: 110, marginTop: 20 }}>
-                <Button title="solid">Nuevo Proyecto</Button>
+            <View style={{ width: 200, alignContent: 'center', marginHorizontal: 140, marginTop: 20 }}>
+                <Link href={{ pathname: "/nProject" }}>
+                    <View style={styles.bttn}>
+                        <Text style={{textAlign:'center', color:'white'}}>
+                            Nuevo Proyecto
+                        </Text>
+                    </View>
+                </Link>
             </View>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    bttn:{
+        backgroundColor: 'blue',
+        borderRadius: 20,
+        alignItems: 'center',
+        padding: 20,
+    },
+});
