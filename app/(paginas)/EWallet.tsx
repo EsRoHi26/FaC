@@ -24,6 +24,7 @@ const TestPage: React.FC = () => {
             <View style={{ width: 200, alignContent: 'center', marginHorizontal: 110, marginTop: 20 }}>
                 <TextInput
                     style={styles.input}
+                    inputMode='numeric'
                     placeholder="Añade un monto"
                     value={monto}
                     onChangeText={setMonto}
