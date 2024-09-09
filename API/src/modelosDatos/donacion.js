@@ -36,4 +36,4 @@ const esquemaDonacion = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Donacion', esquemaDonacion);
+module.exports = mongoose.model('donacion', esquemaDonacion);
