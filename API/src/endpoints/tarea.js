@@ -1,7 +1,7 @@
 const express = require('express');
-const Donaciones = require('../modelosDatos/Donacion');
+const Donaciones = require('../modelosDatos/donacion');
 const Usuario = require('../modelosDatos/Usuario');
-const Proyecto = require('../modelosDatos/Proyecto');
+const Proyecto = require('../modelosDatos/proyecto');
 const router = express.Router();
 
 // Trae todos los Donaciones

@@ -48,4 +48,4 @@ const esquemaProyecto = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Proyecto', esquemaProyecto);
+module.exports = mongoose.model('proyecto', esquemaProyecto);
