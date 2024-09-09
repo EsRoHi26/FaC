@@ -1,51 +1,144 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'expo-router';
-import { View, TextInput, StyleSheet, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Text, ScrollView } from 'react-native';
 import { Button } from '@rneui/themed';
 import RadioGroup from 'react-native-radio-buttons-group';
+import { Float } from 'react-native/Libraries/Types/CodegenTypes';
+import { Usuario } from './interfaces/usuarios.interface';
 
+
+interface Job {
+    Cedula: string;
+    Name: string;
+    Correo: string;
+    AreaTrabajo: string;
+    DineroInicial: number;
+    Telefono: string;
+    Rol: string;
+    Contrasenna: string;
+    proyectosIds: string[]; 
+    donaciones: string[];    
+}
 
 const Registro: React.FC = () => {
-
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-
-    const handleSubmit = () => {
-        setLoading(true);
-        setError('');
-
-        let temp: User = {
-            Cedula: cedula,
-            Name: nombre,
-            Correo: email,
-            AreaTrabajo: area,
+    const [dineroInicial, setDineroInicial] = useState(0);
+    const [usuario, setUsuarios] = useState<Usuario[]>([]);
+    const [job, setJob] = useState<Job>(
+        {
+            Cedula: '',
+            Name: '',
+            Correo: '',
+            AreaTrabajo: '',
             DineroInicial: 0,
-            Telefono: telefono,
-            Rol: selectedId,
-            Contrasenna: password,
-            proyectoPropios: [],
-            donaciones: []
-        };
+            Telefono: '',
+            Rol: '',
+            Contrasenna: '',
+            proyectosIds: [''], 
+            donaciones: [''],    
+        }
+    );
+    
+    const handleInputChange = (value: string, campo: keyof Job) => {
+        if (campo === 'Cedula' || campo === 'Telefono' ) {
+            const numero = parseInt(value, 10); 
+            if (!isNaN(numero)) {
+                setJob((prevJob) => ({
+                    ...prevJob,
+                    [campo]: numero,
+                }));
+            } else {
+                console.warn(`Valor inválido para ${campo}: ${value}`);
+            }
+        } 
+        else if (campo === 'DineroInicial') {
+            const dinero = parseFloat(value); // Convertir texto a float
+            if (!isNaN(dinero)) {
+                setJob((prevJob) => ({
+                    ...prevJob,
+                    DineroInicial: dinero,
+                }));
+                setDineroInicial(dinero); // Actualiza también el estado separado
+            } else {
+                console.warn(`Valor inválido para DineroInicial: ${value}`);
+            }
+        }
+        else {
+            setJob((prevJob) => ({
+                ...prevJob,
+                [campo]: value,
+            }));
+        }
+    };
 
-        fetch('http://localhost:5104/api/usuarios', {
+
+    const testConnection = async () => {
+        try {
+            const response = await fetch('http://192.168.0.9:5104');
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Conexión exitosa. Datos:', data);
+                alert('Conexión exitosa con el backend.');
+            } else {
+                console.log('Error en la respuesta:', response.statusText);
+                alert('Error en la respuesta del backend.');
+            }
+        } catch (error) {
+            console.error('Error de conexión:', error);
+            alert('Error al conectarse con el backend: ' + error);
+        }
+    };
+    
+    const checkURLResolution = async () => {
+        try {
+            const response = await fetch('http://192.168.0.9:5104', {
+                method: 'HEAD', // Método HEAD para comprobar si responde sin descargar datos.
+            });
+            if (response.ok) {
+                alert('El backend está disponible y responde.');
+            } else {
+                alert('Error en la conexión con el backend: ' + response.statusText);
+            }
+        } catch (error) {
+            alert('Error de conexión: ' + error);
+        }
+    };
+    
+    const handleForm = () => {
+        console.log("Datos del usuario a guardar:", job);
+        if (!job.Cedula || !job.Name || !job.Correo || !job.AreaTrabajo || job.DineroInicial <= 0 || !job.Telefono || !job.Rol || !job.Contrasenna) {
+            console.log("Cedula:", job.Cedula);
+            console.log("Nombre:", job.Name);
+            console.log("Correo:", job.Correo);
+            console.log("Area de Trabajo:", job.AreaTrabajo);
+            console.log("Dinero Inicial:", job.DineroInicial);
+            console.log("Telefono:", job.Telefono);
+            console.log("Rol:", job.Rol);
+            console.log("Contraseña:", job.Contrasenna);
+
+            alert('Por favor, completa todos los campos.');
+            return;
+        }
+
+        fetch('http://192.168.0.9:5104/api/usuarios', {
             method: 'POST',
+            body: JSON.stringify(job),
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(temp),
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // handle the response data here
-            })
-            .catch(error => {
-                setError('An error occurred. Please try again later.');
-            })
-            .finally(() => {
-                setLoading(false);
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(() => {
+            alert('Usuario creado con éxito');   
+        })
+            .catch((error) => {
+                console.error('Error en la creación del usuario:', error);
+                alert('Hubo un error al crear el usuario: ' + error.message);  
             });
-
-        console.log(temp);
     };
 
 
@@ -84,28 +177,39 @@ const Registro: React.FC = () => {
         donaciones: string[];
     }
 
+    const handleRadioPress = (id: string) => {
+        setSelectedId(id);
+        const selectedButton = radioButtons.find(button => button.id === id);
+        if (selectedButton) {
+            setJob(prevJob => ({
+                ...prevJob,
+                Rol: selectedButton.value // Actualiza el rol según el botón seleccionado
+            }));
+        }
+    };
 
     return (
+        <ScrollView>
         <View style={styles.container}>
             <View style={styles.container2}>
                 <Text style={styles.title}>Registro</Text>
-                <TextInput style={styles.input} placeholder="Nombre" onChangeText={setNombre} />
-                <TextInput style={styles.input} placeholder="Cédula" onChangeText={setCedula} />
-                <TextInput style={styles.input} placeholder="Email" onChangeText={setEmail} />
-                <TextInput style={styles.input} placeholder="Area de Trabajo" onChangeText={setArea} />
-                <TextInput style={styles.input} placeholder="Telefono" onChangeText={setTelefono} />
-
-                <RadioGroup
-                    radioButtons={radioButtons}
-                    onPress={setSelectedId}
+                <TextInput style={styles.input} placeholder="Nombre" onChangeText={(text) => handleInputChange(text, 'Name')} value={job.Name}  />
+                <TextInput style={styles.input} placeholder="Cédula"  onChangeText={(text) => handleInputChange(text, 'Cedula')} value={job.Cedula} />
+                <TextInput style={styles.input} placeholder="Email" onChangeText={(text) => handleInputChange(text, 'Correo')} value={job.Correo}/>
+                <TextInput style={styles.input} placeholder="Area de Trabajo" onChangeText={(text) => handleInputChange(text, 'AreaTrabajo')} value={job.AreaTrabajo}/>
+                <TextInput style={styles.input} placeholder="Telefono" onChangeText={(text) => handleInputChange(text, 'Telefono')} value={job.Telefono}/>
+                <TextInput style={styles.input} placeholder="Dinero inicial" onChangeText={(text) => handleInputChange(text, 'DineroInicial')} value={dineroInicial.toString()}/>
+                
+                <RadioGroup 
+                    radioButtons={radioButtons} 
+                    onPress={handleRadioPress}
                     selectedId={selectedId}
                 />
-                <TextInput style={styles.input} placeholder="Password" onChangeText={setPassword} />
-                <Button title="solid" color='#8cc583'>
-                    <Link href="/(paginas)" onPress={handleSubmit}>Registro</Link>
-                </Button>
+                <TextInput style={styles.input} placeholder="Contraseña" onChangeText={(text) => handleInputChange(text, 'Contrasenna')} value={job.Contrasenna}/>
+                <Button title= "Guardar" color='#8cc583' onPress={handleForm} />
             </View>
         </View>
+        </ScrollView>
     );
 
 
