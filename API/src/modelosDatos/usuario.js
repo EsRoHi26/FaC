@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 
 const esquemaUsuario = mongoose.Schema({
-    id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-        auto: true 
-    },
+    
     cedula: {
         type: String, 
         required: true
