@@ -6,6 +6,7 @@ import RadioGroup from 'react-native-radio-buttons-group';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import { Usuario } from './interfaces/usuarios.interface';
 
+
 interface Job {
     Cedula: string;
     Name: string;
@@ -68,6 +69,7 @@ const Registro: React.FC = () => {
             }));
         }
     };
+
 
     const testConnection = async () => {
         try {
@@ -139,9 +141,10 @@ const Registro: React.FC = () => {
             });
     };
 
+
     const radioButtons = useMemo(() => ([
         {
-            id: '1', 
+            id: '1',
             label: 'Admistrador',
             value: 'admistrador'
         },
@@ -151,7 +154,28 @@ const Registro: React.FC = () => {
             value: 'usuario'
         }
     ]), []);
-    const [selectedId, setSelectedId] = useState<string>();
+
+    const [selectedId, setSelectedId] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [cedula, setCedula] = useState('');
+    const [email, setEmail] = useState('');
+    const [area, setArea] = useState('');
+    const [telefono, setTelefono] = useState('');
+    const [password, setPassword] = useState('');
+    const [tipo, setTipo] = useState('');
+          
+    interface User {
+        Cedula: string;
+        Name: string;
+        Correo: string;
+        AreaTrabajo: string;
+        DineroInicial: number;
+        Telefono: string;
+        Rol: string;
+        Contrasenna: string;
+        proyectoPropios: string[];
+        donaciones: string[];
+    }
 
     const handleRadioPress = (id: string) => {
         setSelectedId(id);
@@ -189,7 +213,7 @@ const Registro: React.FC = () => {
     );
 
 
-    
+
 };
 
 const styles = StyleSheet.create({
