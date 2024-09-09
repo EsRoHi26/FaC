@@ -1,5 +1,5 @@
 const express = require('express');
-const esquemaUsuario = require('../modelosDatos/usuario');
+const esquemaUsuario = require('../modelosDatos/Usuario');
 const router = express.Router();
 
 // Trae todos los usuarios
