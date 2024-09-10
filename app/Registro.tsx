@@ -96,7 +96,7 @@ const Registro: React.FC = () => {
                 alert('Hubo un error al crear el usuario: ' + error.message);  
             });
 
-        navigation.navigate('index');
+        //navigation.navigate('index');
     };
 
 
