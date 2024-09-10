@@ -1,10 +1,13 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Text, View, ScrollView } from 'react-native';
 import { Button, Card } from '@rneui/base';
-import { Link } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 
 
 export default function ProyectScreen() {
+
+    const { correo } = useLocalSearchParams();
+
     return (
         <View>
             <View style={{ height: 700 }}>
