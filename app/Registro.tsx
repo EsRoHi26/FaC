@@ -70,38 +70,6 @@ const Registro: React.FC = () => {
         }
     };
 
-
-    const testConnection = async () => {
-        try {
-            const response = await fetch('http://192.168.0.9:5104');
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Conexión exitosa. Datos:', data);
-                alert('Conexión exitosa con el backend.');
-            } else {
-                console.log('Error en la respuesta:', response.statusText);
-                alert('Error en la respuesta del backend.');
-            }
-        } catch (error) {
-            console.error('Error de conexión:', error);
-            alert('Error al conectarse con el backend: ' + error);
-        }
-    };
-    
-    const checkURLResolution = async () => {
-        try {
-            const response = await fetch('http://192.168.0.9:5104', {
-                method: 'HEAD', // Método HEAD para comprobar si responde sin descargar datos.
-            });
-            if (response.ok) {
-                alert('El backend está disponible y responde.');
-            } else {
-                alert('Error en la conexión con el backend: ' + response.statusText);
-            }
-        } catch (error) {
-            alert('Error de conexión: ' + error);
-        }
-    };
     
     const handleForm = () => {
         console.log("Datos del usuario a guardar:", job);
