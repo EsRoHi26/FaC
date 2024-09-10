@@ -4,7 +4,7 @@ import { View, TextInput, StyleSheet, Text } from 'react-native';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = () => {
+const LoginScreen = ( param: string) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -39,7 +39,10 @@ const LoginScreen = () => {
     };
 
     const navigateToHome = () => {
-        navigation.navigate('(paginas)', {correo: email});
+        navigation.setParams({correo: email});
+        console.log(navigation.getState());
+        param = email;
+        navigation.navigate('(paginas)');
     }
 
     return (

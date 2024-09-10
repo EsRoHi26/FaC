@@ -1,12 +1,10 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Text, View, ScrollView } from 'react-native';
 import { Button, Card } from '@rneui/base';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { Link } from 'expo-router';
 
 
 export default function HomeScreen() {
-
-  const { correo } = useLocalSearchParams();
 
   return (
     <View>
