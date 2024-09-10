@@ -12,7 +12,7 @@ router.get('/usuarios', (req, res) => {
 // Trae los usuarios por correo
 router.get('/usuarios/correo/:correo', (req, res) => {
     const { correo } = req.params;
-    esquemaUsuario.find({ correo })
+    esquemaUsuario.find({ email: correo })
         .then((usuarios) => res.json(usuarios))
         .catch((error) => res.json(error));
 });
