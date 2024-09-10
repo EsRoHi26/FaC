@@ -4,10 +4,11 @@ import { View, TextInput, StyleSheet, Text } from 'react-native';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 
-
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const navigation = useNavigation();
 
     const handleLogin = () => {
         // Implement your login logic here
@@ -32,14 +33,13 @@ const LoginScreen = () => {
         
     };
 
-    const navigation = useNavigation();
-
     const navigateToRegistro = () => {
         navigation.navigate('Registro');
+        
     };
 
     const navigateToHome = () => {
-        navigation.navigate('(paginas)');
+        navigation.navigate('(paginas)', {correo: email});
     }
 
     return (

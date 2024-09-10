@@ -27,15 +27,15 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false , title: "Principal"}} />
-        <Stack.Screen name="(paginas)" options={{ headerShown: false }} />
-        <Stack.Screen name="mpPage" options={{title: "Mis proyectos"}} />
-        <Stack.Screen name="pPage" options={{title: "Donar"}} />
-        <Stack.Screen name="nProject" options={{title: "Nuevo proyecto"}} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false, title: "Principal" }} />
+          <Stack.Screen name="(paginas)" options={{ headerShown: false }} />
+          <Stack.Screen name="mpPage" options={{ title: "Mis proyectos" }} />
+          <Stack.Screen name="pPage" options={{ title: "Donar" }} />
+          <Stack.Screen name="nProject" options={{ title: "Nuevo proyecto" }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ThemeProvider>
   );
 }
