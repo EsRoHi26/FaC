@@ -1,15 +1,6 @@
 const mongoose = require('mongoose');
 
 const esquemaProyecto = mongoose.Schema({
-    id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-        auto: true
-    },
-    codigoP: {
-        type: String,
-        required: true
-    },
     correoResponsable: {
         type: String,
         required: true
@@ -23,15 +14,15 @@ const esquemaProyecto = mongoose.Schema({
         required: true
     },
     objetivoF: {
-        type: Number, 
+        type: String, 
         required: true
     },
     montoReca: {
-        type: Number, 
+        type: String, 
         required: true
     },
     fechaLimite: {
-        type: Date, 
+        type: String, 
         required: true
     },
     categoriaP: {

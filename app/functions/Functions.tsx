@@ -42,12 +42,12 @@ export async function eliminar(id: { id: string, estado: string, prjID: string }
 }
 
 export async function Crear(valores: any) {
-    const valoresJSON = JSON.stringify(valores);
-    console.log(valoresJSON);
+    //const valoresJSON = JSON.stringify(valores);
+    //console.log(valoresJSON);
 
-    fetch("http://localhost:9000/api/proyectos", {
+    fetch("http://10.0.2.2:9000/api/proyectos", {
         method: 'POST',
-        body: JSON.stringify(valoresJSON),
+        body: JSON.stringify(valores),
         headers: {
             'Content-Type': 'application/json'
         }
