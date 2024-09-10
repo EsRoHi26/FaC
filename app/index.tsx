@@ -4,13 +4,29 @@ import { View, TextInput, StyleSheet, Text } from 'react-native';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 
+
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
         // Implement your login logic here
+        fetch('http://10.0.2.2:9000/api/autenticacion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({"email": email, "contrasenna": password}),
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Usuario no encontrado');
+        }
+    })
+
         console.log('Logging in...');
+        //navigateToHome();
     };
 
     const navigation = useNavigation();
@@ -18,6 +34,10 @@ const LoginScreen = () => {
     const navigateToRegistro = () => {
         navigation.navigate('Registro');
     };
+
+    const navigateToHome = () => {
+        navigation.navigate('/(paginas)');
+    }
 
     return (
         <View style={styles.container}>
@@ -36,9 +56,7 @@ const LoginScreen = () => {
                     value={password}
                     onChangeText={setPassword}
                 />
-                <Button title= "solid" color='#A1E79F'>
-                <Link href="/(paginas)">Login</Link>
-                </Button>
+                <Button title= "solid" color='#A1E79F' onPress={handleLogin}>Login</Button>
                 <Text style={styles.title2}>Sign up</Text>
                 <Button title= "Registro" color='#A1E79F'  onPress={navigateToRegistro}/>
                 
