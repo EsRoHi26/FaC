@@ -63,8 +63,7 @@ router.put('/usuariosP/:id', (req, res) => {
 // Eliminar un usuario
 router.delete('/usuarios/:id', (req, res) => {
     const { id } = req.params;
-
-    esquemaUsuario.remove({ _id: id })
+    esquemaUsuario.findByIdAndDelete(id)
         .then(() => { res.json({ mensaje: 'Usuario eliminado' }) })
         .catch((err) => res.json(err));
 });

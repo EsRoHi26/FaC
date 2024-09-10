@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'expo-router';
 import { View, TextInput, StyleSheet, Text, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Button } from '@rneui/themed';
 import RadioGroup from 'react-native-radio-buttons-group';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
@@ -21,6 +22,8 @@ interface Job {
 }
 
 const Registro: React.FC = () => {
+    const navigation = useNavigation();
+    
     const [job, setJob] = useState<Job>(
         {
             cedula: '',
@@ -92,6 +95,8 @@ const Registro: React.FC = () => {
                 console.error('Error en la creación del usuario:', error);
                 alert('Hubo un error al crear el usuario: ' + error.message);  
             });
+
+        navigation.navigate('index');
     };
 
 
