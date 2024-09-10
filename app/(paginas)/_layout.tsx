@@ -33,6 +33,13 @@ export default function TabLayout() {
             title: 'Mis Proyectos',
           }}
         />
+        <Drawer.Screen
+          name= "NuevoProyecto"
+          options={{
+            drawerLabel: 'Nuevo Proyecto',
+            title: 'Nuevo Proyecto',
+          }}
+        />
       </Drawer>
     </GestureHandlerRootView>
   );
