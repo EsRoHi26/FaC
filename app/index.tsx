@@ -18,15 +18,18 @@ const LoginScreen = () => {
             },
             body: JSON.stringify({"email": email, "contrasenna": password}),
     }).then((response) => {
-        if (response.ok) {
+        if (response.status === 200) {
+            console.log('Usuario encontrado');
+            navigateToHome();
             return response.json();
         } else {
             throw new Error('Usuario no encontrado');
+            alert('Usuario no encontrado');
         }
     })
 
         console.log('Logging in...');
-        //navigateToHome();
+        
     };
 
     const navigation = useNavigation();
@@ -36,7 +39,7 @@ const LoginScreen = () => {
     };
 
     const navigateToHome = () => {
-        navigation.navigate('/(paginas)');
+        navigation.navigate('(paginas)');
     }
 
     return (
