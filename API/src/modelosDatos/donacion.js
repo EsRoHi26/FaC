@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 
 const esquemaDonacion = mongoose.Schema({
-    id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-        auto: true // Para que se genere automáticamente el ObjectId
-    },
+    
     monto: {
         type: Number, // Cambiado a Number para coincidir con el tipo de datos original
         required: true
