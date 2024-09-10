@@ -12,7 +12,7 @@ router.get('/usuarios', (req, res) => {
 // Trae los usuarios por correo
 router.get('/usuarios/correo/:correo', (req, res) => {
     const { correo } = req.params;
-    esquemaUsuario.find({ correo })
+    esquemaUsuario.find({ email: correo })
         .then((usuarios) => res.json(usuarios))
         .catch((error) => res.json(error));
 });
@@ -63,8 +63,7 @@ router.put('/usuariosP/:id', (req, res) => {
 // Eliminar un usuario
 router.delete('/usuarios/:id', (req, res) => {
     const { id } = req.params;
-
-    esquemaUsuario.remove({ _id: id })
+    esquemaUsuario.findByIdAndDelete(id)
         .then(() => { res.json({ mensaje: 'Usuario eliminado' }) })
         .catch((err) => res.json(err));
 });
