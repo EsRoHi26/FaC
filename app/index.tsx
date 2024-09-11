@@ -20,7 +20,6 @@ const LoginScreen = ( param: string) => {
             body: JSON.stringify({"email": email, "contrasenna": password}),
     }).then((response) => {
         if (response.status === 200) {
-            console.log('Usuario encontrado');
             navigateToHome();
             return response.json();
         } else {
@@ -40,7 +39,6 @@ const LoginScreen = ( param: string) => {
 
     const navigateToHome = () => {
         navigation.setParams({correo: email});
-        console.log(navigation.getState());
         param = email;
         navigation.navigate('(paginas)');
     }
