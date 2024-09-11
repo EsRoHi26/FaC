@@ -2,17 +2,17 @@ import { BackgroundImage, Button, Card, color } from '@rneui/base';
 import { getBackgroundColorAsync } from 'expo-system-ui';
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-const TestPage: React.FC = () => {
+const TestPage: React.FC = ( param ) => {
     const [monto, setMonto] = React.useState("0");
    // let montoTxt = "1000"
     const [montoTxt, setMontoTxt] = React.useState("1000");
+    const navigation = useNavigation();
 
-    const route = useRoute();
-
-    const { correo } = route.params;
-
+    const correo = navigation.getParent()?.getState().routes[0].params;
+    console.log(correo);
+    
     const add = () => {
         const newMontoTxt = (parseInt(monto) + parseInt(montoTxt)).toString();
         setMontoTxt(newMontoTxt);
