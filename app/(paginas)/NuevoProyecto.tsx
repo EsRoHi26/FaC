@@ -7,6 +7,7 @@ import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import { Usuario } from '../interfaces/usuarios.interface';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Crear } from '../functions/Functions';
+import { useNavigation } from '@react-navigation/native';
 
 interface Proyecto {
     correoResponsable: string;
@@ -22,11 +23,17 @@ interface Proyecto {
 
 const NuevoProyecto: React.FC = () => {
 
-    const { correo } = useLocalSearchParams();
+    //const { correo } = useLocalSearchParams();
+    const navigation = useNavigation();
+    const correos = navigation.getParent()?.getState().routes[0].params;
+    
+    const correoResp = (correos as { correo: string }).correo;
+    
 
-
+    console.log("Correo resp en Proyectos "+ correoResp)
+    
     const [valores, setValores] = useState<Proyecto>({
-        correoResponsable: 'fgccgf',
+        correoResponsable: correoResp,
         pName: '',
         descripcion: '',
         objetivoF: '',
