@@ -5,7 +5,7 @@ import React from 'react';
 //import { TextInput } from 'react-native-gesture-handler';
 
 export default function ProyectPage() {
-    const { id } = useLocalSearchParams();
+    const { id, name } = useLocalSearchParams();
     const [amount, setAmount] = React.useState(1000);
     const [goal, setGoal] = React.useState(5000);
     const [monto, setMonto] = React.useState("0");
@@ -16,7 +16,7 @@ export default function ProyectPage() {
                 <View style={styles.scrollView}>
                     <Image source={{ uri: 'https://picsum.photos/200/300' }}
                         style={{ width: 300, height: 200 }} />
-                    <Text style={{ fontSize: 20, margin: 20, textAlign: 'center', textDecorationStyle: 'double' }}>Proyecto {id}</Text>
+                    <Text style={{ fontSize: 20, margin: 20, textAlign: 'center', textDecorationStyle: 'double' }}>Proyecto {name}</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ alignItems: 'center', flex: 1 }}>
                             <Card>
