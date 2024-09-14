@@ -1,5 +1,6 @@
 const express = require('express');
 const esquemaProyecto = require('../modelosDatos/proyecto');
+const Usuario = require('../modelosDatos/Usuario');
 const { ExplainVerbosity } = require('mongodb');
 const moment = require('moment');
 const router = express.Router(); 
@@ -13,7 +14,7 @@ router.post('/proyectos',(req,res)=>{
     const proyecto = esquemaProyecto(req.body); // Create a new instance of the esquemaProyecto model
 
     proyecto.save()
-    .then(()=> res.json(proyecto))
+    .then(()=> {res.json(proyecto)})
     .catch((error)=> res.json(error));
     
 
