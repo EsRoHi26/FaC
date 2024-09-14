@@ -147,4 +147,21 @@ router.put('/usuariosM', (req, res) => {
         .catch((err) => res.json(err));
 });
 
+router.get('/usuariosMP/:email', (req, res)=>{
+    const { email } = req.params;
+    console.log("correo puto"+email);
+    
+    esquemaUsuario.findOne({email}).then(usuario =>{
+        
+        let proyectos = usuario.proyectoPropios;
+        
+
+        res.json(proyectos);
+
+    })
+    .catch((error) => res.json(error));
+    
+
+});
+
 module.exports = router;

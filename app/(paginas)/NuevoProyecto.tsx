@@ -30,14 +30,13 @@ const NuevoProyecto: React.FC = () => {
     const correoResp = (correos as { correo: string }).correo;
     
 
-    console.log("Correo resp en Proyectos "+ correoResp)
     
     const [valores, setValores] = useState<Proyecto>({
         correoResponsable: correoResp,
         pName: '',
         descripcion: '',
         objetivoF: '',
-        montoReca: 'cgh',
+        montoReca: '0',
         fechaLimite: '',
         categoriaP: 'fg',
         mediaItems: ["fyftyft"],
