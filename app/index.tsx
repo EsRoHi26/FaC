@@ -12,7 +12,7 @@ const LoginScreen = ( param: string) => {
 
     const handleLogin = () => {
         // Implement your login logic here
-        fetch('http://192.168.0.9:9000/api/autenticacion', {
+        fetch('http://10.0.2.2:9000/api/autenticacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

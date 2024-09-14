@@ -4,7 +4,7 @@ const { ExplainVerbosity } = require('mongodb');
 const moment = require('moment');
 const router = express.Router(); 
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey("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");
+sgMail.setApiKey("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");
 
 
 //crear proyecto
@@ -15,6 +15,7 @@ router.post('/proyectos',(req,res)=>{
     proyecto.save()
     .then(()=> res.json(proyecto))
     .catch((error)=> res.json(error));
+    
 
 
 });
@@ -143,7 +144,7 @@ router.get('/proyectos/:id/tareas/:idTarea', (req, res) => {
 });
 
 
-// actualizar estado de una tarea en el proyecto
+// notificaciones de donacion a un proyecto
 router.put('/proyectos/:id/tareasEstado/:idTarea', (req, res) => {
     let { estado } = req.body;
     const { id, idTarea } = req.params;

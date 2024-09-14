@@ -1,6 +1,9 @@
 const express = require('express');
 const esquemaUsuario = require('../modelosDatos/Usuario');
 const router = express.Router();
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey("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");
+
 
 // Trae todos los usuarios
 router.get('/usuarios', (req, res) => {
@@ -32,12 +35,35 @@ router.get('/usuarios/correo', (req, res) => {
 });
 
 // Guarda un usuario
-router.post('/usuarios/', (req, res) => {
+router.post('/usuarios/', async (req, res) => {
     const usuario = new esquemaUsuario(req.body);
     
     usuario.save()
-        .then(() => res.status(201).json(usuario))
-        .catch((error) => res.json(error));
+    .then( async(usuarios) => {
+
+        console.log("aqui putos 1")
+        res.json(usuarios)
+        const msg = {
+        to: usuario.email,
+        from: 'gomezacunav@gmail.com',
+        subject: 'Fund a Cause: Usuario creado',
+        text: `Su usuario de Fund a Cause ha sido creado exitosamente`,
+        html: `<strong>Su usuario de Fund a Cause ha sido creado exitosamente</strong>`
+        };
+    
+        try{
+            console.log("aqui putos2")
+            await sgMail.send(msg);
+            console.log('Correo enviado con éxito');
+        }
+        catch(error){
+            console.log(error);
+        }
+    })
+    
+    
+    .catch((error) => res.json(error));
+            
 });
 
 //buscar usuario por id
