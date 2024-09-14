@@ -41,9 +41,9 @@ router.post('/usuarios/', async (req, res) => {
     usuario.save()
     .then( async(usuarios) => {
 
-        console.log("aqui putos 1")
+        
         res.json(usuarios)
-        const msg = {
+        /*const msg = {
         to: usuario.email,
         from: 'gomezacunav@gmail.com',
         subject: 'Fund a Cause: Usuario creado',
@@ -52,13 +52,13 @@ router.post('/usuarios/', async (req, res) => {
         };
     
         try{
-            console.log("aqui putos2")
+            
             await sgMail.send(msg);
             console.log('Correo enviado con éxito');
         }
         catch(error){
             console.log(error);
-        }
+        }*/
     })
     
     
