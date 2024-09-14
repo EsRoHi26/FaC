@@ -11,11 +11,11 @@ interface email{
 
 function TestPage () {
     const [monto, setMonto] = React.useState("0");
-    const [montoTxt, setMontoTxt] = React.useState("1000");
+    const [montoTxt, setMontoTxt] = React.useState("0");
     // let montoTxt = "1000"
 
     const getMoney = (mail:string) => {
-        const link:string = 'http://192.168.0.9:9000/api/usuarios/correo/'+mail;
+        const link:string = 'http://10.0.2.2:9000/api/usuarios/correo/'+mail;
         console.log(link);
         fetch(link , {
             method: 'GET',
@@ -38,13 +38,29 @@ function TestPage () {
     }
 
     const navigation = useNavigation();
-    const correo: email = navigation.getParent()?.getState().routes[0].params;
-    getMoney(correo.correo.toString());
+    const correo= navigation.getParent()?.getState().routes[0].params;
+    const correoResp = (correo as { correo: string }).correo;
+    getMoney(correoResp);
 
     const add = () => {
         const newMontoTxt = (parseInt(monto) + parseInt(montoTxt)).toString();
-        setMontoTxt(newMontoTxt);
-        console.log(newMontoTxt);
+
+        fetch('http://10.0.2.2:9000/api/usuarios/dinero/'+correoResp, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                dinero: newMontoTxt,
+            }),
+        }).then((response) => {
+            if (response.status === 200) {
+                console.log('Monto actualizado');
+                setMontoTxt(newMontoTxt);
+            } else {
+                throw new Error('No se pudo actualizar el monto');
+            }
+        });
     }
 
     return (

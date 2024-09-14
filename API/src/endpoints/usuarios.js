@@ -17,6 +17,18 @@ router.get('/usuarios/correo/:correo', (req, res) => {
         .catch((error) => res.json(error));
 });
 
+// Actualizar dinero inicial de usuario
+router.put('/usuarios/dinero/:correo', (req, res) => {
+    const { correo } = req.params;
+    const { dinero } = req.body;
+    const filter = { email: correo };
+    const plata = parseInt(dinero);
+
+    esquemaUsuario.updateOne(filter, { $set: { dineroInicial: plata } })
+        .then(() => res.status(200).json({ mensaje: 'Dinero inicial actualizado' }))
+        .catch((error) => res.json(error));
+});
+
 //obtener correos de usuarios
 router.get('/usuarios/correo', (req, res) => {
     let correos = []
