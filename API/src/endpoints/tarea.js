@@ -20,7 +20,7 @@ router.get('/donaciones/:correo', (req, res) => {
 
 // Guarda una donacion
 router.post('/donaciones', (req, res) => {
-    const donacion = req.body;
+    const donacion = Donaciones(req.body);
 
     // Validate the user
     Usuario.find({ email: donacion.correoDonante })
@@ -28,7 +28,7 @@ router.post('/donaciones', (req, res) => {
             if (usuarioEx.length === 0) {
                 return res.status(409).json({ error: 'este usuario no existe' });
             }
-            console.log(usuarioEx);
+            //console.log(usuarioEx);
             // Validate the project
             Proyecto.find({ _id: donacion.proyectoId })
                 .then((proyecto) => {
@@ -48,18 +48,13 @@ router.post('/donaciones', (req, res) => {
                             const updatedDinero = usuarioEx[0].dineroInicial - donacion.monto;
                             Usuario.updateOne({ correo: donacion.correoDonante }, { dineroInicial: updatedDinero })
                                 .then(() => {
-                                    // Add donation to user's list
-                                    Usuario.updateOne({ correo: donacion.correoDonante }, { $push: { donaciones: donacion._id } })
+                                    // Update the project's collected amount
+                                    const updatedMontoReca = Math.abs(proyecto[0].montoReca) + donacion.monto;
+                                    Proyecto.updateOne({ _id: donacion.proyectoId }, { montoReca: updatedMontoReca })
                                         .then(() => {
-                                            // Update the project's collected amount
-                                            const updatedMontoReca = Math.abs(proyecto[0].montoReca) + donacion.monto;
-                                            Proyecto.updateOne({ _id: donacion.proyectoId }, { montoReca: updatedMontoReca })
-                                                .then(() => {
-                                                    // Add donation to project's list
-                                                    Proyecto.updateOne({ _id: donacion.proyectoId }, { $push: { donaciones: donacion._id } })
-                                                        .then(() => res.status(201).json(donacion))
-                                                        .catch((error) => res.status(500).json({ error: error.message }));
-                                                })
+                                            // Add donation to project's list
+                                            Proyecto.updateOne({ _id: donacion.proyectoId }, { $push: { donaciones: donacion._id } })
+                                                .then(() => res.status(201).json(donacion))
                                                 .catch((error) => res.status(500).json({ error: error.message }));
                                         })
                                         .catch((error) => res.status(500).json({ error: error.message }));
