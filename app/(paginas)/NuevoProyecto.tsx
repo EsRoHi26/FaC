@@ -5,7 +5,7 @@ import { Button } from '@rneui/themed';
 import RadioGroup from 'react-native-radio-buttons-group';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import { Usuario } from '../interfaces/usuarios.interface';
-import DateTimePicker from '@react-native-community/datetimepicker';
+//import DateTimePicker from '@react-native-community/datetimepicker';
 import { Crear } from '../functions/Functions';
 import { useNavigation } from '@react-navigation/native';
 
@@ -46,14 +46,14 @@ const NuevoProyecto: React.FC = () => {
 
 
 
-    const handleForm = async () => {
+    const handleForm = () => {
         const nuevoProyecto: Proyecto = {
             ...valores,
         };
 
         console.log('Datos del proyecto a enviar:', nuevoProyecto);
         try {
-            const proyectoCreado = await Crear(nuevoProyecto);
+            const proyectoCreado = Crear(nuevoProyecto);
 
 
 
