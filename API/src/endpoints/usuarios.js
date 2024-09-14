@@ -93,7 +93,7 @@ router.put('/usuariosP/:id', (req, res) => {
     const { id } = req.params;
     const { proyectoId } = req.body;
 
-    esquemaUsuario.updateOne({ _id: id }, { $addToSet: { proyectos: proyectoId } })
+    esquemaUsuario.updateOne({ email: id }, { $push: { proyectoPropios: proyectoId } })
         .then(() => res.status(204).send())
         .catch((error) => res.json(error));
 });

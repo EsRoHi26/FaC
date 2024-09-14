@@ -23,12 +23,12 @@ router.post('/donaciones', (req, res) => {
     const donacion = req.body;
 
     // Validate the user
-    Usuario.find({ correo: donacion.correoDonante })
+    Usuario.find({ email: donacion.correoDonante })
         .then((usuarioEx) => {
             if (usuarioEx.length === 0) {
                 return res.status(409).json({ error: 'este usuario no existe' });
             }
-
+            console.log(usuarioEx);
             // Validate the project
             Proyecto.find({ _id: donacion.proyectoId })
                 .then((proyecto) => {

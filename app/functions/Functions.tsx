@@ -56,8 +56,20 @@ export async function Crear(valores: any) {
         .then(res => res.json())
         .then(data => {
             console.log(data)
+            console.log(data.correoResponsable)
+            fetch("http://10.0.2.2:9000/api/usuariosP/" + data.correoResponsable, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    proyectoId: data._id.toString()
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => res.json())
+                .catch(error => console.error('Error:', error))
             alert("Proyecto creado con exito")
-            window.location.reload()
+            //window.location.reload()
         })
         .catch(error => console.error('Error:', error))
 
