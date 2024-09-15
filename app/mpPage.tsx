@@ -17,8 +17,9 @@ interface Proyectos {
 }
 
 export default function ProyectPage() {
-    const navigation = useNavigation();
-    const { id } = useLocalSearchParams();
+
+    const { id, name } = useLocalSearchParams();
+
     const [amount, setAmount] = React.useState(1000);
     const [goal, setGoal] = React.useState(5000);
     const [project, setProject] = React.useState<Proyectos | null>(null);  // Cambiado a un solo objeto
@@ -73,10 +74,9 @@ export default function ProyectPage() {
         <View>
             <ScrollView>
                 <View style={styles.scrollView}>
-                    <Image source={{ uri: 'https://picsum.photos/200/300' }} style={{ width: 300, height: 200 }} />
-                    <Text style={{ fontSize: 20, margin: 20, textAlign: 'center', textDecorationStyle: 'double' }}>
-                        Proyecto {project.pName}  {}
-                    </Text>
+                    <Image source={{ uri: 'https://picsum.photos/200/300' }}
+                        style={{ width: 300, height: 200 }} />
+                    <Text style={{ fontSize: 20, margin: 20, textAlign: 'center', textDecorationStyle: 'double' }}>Proyecto {name}</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ alignItems: 'center', flex: 1 }}>
                             <Card>

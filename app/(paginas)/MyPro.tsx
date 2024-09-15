@@ -4,7 +4,9 @@ import { Button, Card } from '@rneui/base';
 import { Link } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+
 interface Proyectos {
+    _id:string;
     correoResponsable: string;
     pName: string;
     descripcion: string;
@@ -28,6 +30,7 @@ export default function ProyectScreen() {
     const [projects, setProjects] = React.useState<Proyectos[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [projectIds, setProjectIds] = React.useState<string[]>([]);
+    const [otherProjects, setOtherProjects] = React.useState<Proyectos[]>([]);
 
     const getProjectById = async (id: string) => {
         try {
@@ -45,42 +48,40 @@ export default function ProyectScreen() {
 
     const getProjects = async () => {
         try {
-            const response = await fetch('http://10.0.2.2:9000/api/usuariosMP/' + correoResp, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            const projectIds = await response.json();
-            setProjectIds(projectIds);
-
-            const projectDetailsPromises = projectIds.map((id: string) => getProjectById(id));
-            const projectDetails = await Promise.all(projectDetailsPromises);
+          const response = await fetch('http://10.0.2.2:9000/api/proyectos', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }).then(async (response) => {
+            const projectDetails = await response.json();
             setProjects(projectDetails);
+            await projectDetails.forEach((project:Proyectos) => {
+              console.log(project.correoResponsable);
+              console.log(correoResp);
+              if (project.correoResponsable === correoResp) {
+                setOtherProjects((oldProjects) => [...oldProjects, project]);
+              }
+              setLoading(false);
+            }
+            )});
         } catch (e) {
-            console.log(e);
-        } finally {
-            setLoading(false);
+          console.log(e);
         }
-    };
+      }
 
     React.useEffect(() => {
         getProjects();
     }, []);
 
-    const navigateToProyecto = () => {
-        navigation.navigate('NuevoProyecto');
-        
-    };
-
     return (
         <View>
             <View style={{ height: 700 }}>
                 <ScrollView>
-                    {!loading && projects.map((project, i) => (
+                    {!loading && otherProjects.map((project, i) => (
                         <Link href={{
                             pathname: "/mpPage",
-                            params: { id: project._id }
+                            params: { id: project._id, name: project.pName }
                         }} key={i} asChild>
                             <Pressable>
                                 <Card key={i}>
