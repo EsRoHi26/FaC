@@ -58,10 +58,10 @@ router.get('/proyectos/:id', (req, res) => {
 router.put('/proyectos/:id', (req, res) => {
     const { id } = req.params;
 
-    const { email, departamento, telefono, proyecto } = req.body;
+    const { descripcion, objetivoF, categoriaP, mediaItems } = req.body;
 
-    esquemaUsuario.updateOne({_id: id}, { $set: {email, departamento, telefono, proyecto}})
-        .then(()=>{res.json({mensaje: 'Usuario actualizado'})} )
+    esquemaUsuario.updateOne({_id: id}, { $set: {descripcion, objetivoF, categoriaP, mediaItems}})
+        .then(()=>{res.json({mensaje: 'Proyecto actualizado'})} )
         .catch((err)=> res.json(err));  
 });
 

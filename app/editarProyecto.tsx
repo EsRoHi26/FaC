@@ -4,47 +4,34 @@ import { View, TextInput, StyleSheet, Text, ScrollView } from 'react-native';
 import { Button } from '@rneui/themed';
 import RadioGroup from 'react-native-radio-buttons-group';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
-import { Usuario } from '../interfaces/usuarios.interface';
 //import DateTimePicker from '@react-native-community/datetimepicker';
-import { Crear } from '../functions/Functions';
 import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker'; 
+import DropDownPicker from 'react-native-dropdown-picker'; // Importar DropDownPicker
+
 interface Proyecto {
-    correoResponsable: string;
-    pName: string;
     descripcion: string;
     objetivoF: string;
-    montoReca: string;
-    fechaLimite: string;
     categoriaP: string;
     mediaItems: string[];
-    donaciones: string[];
 }
 
 const NuevoProyecto: React.FC = () => {
 
-    //const { correo } = useLocalSearchParams();
-    const navigation = useNavigation();
-    const correos = navigation.getParent()?.getState().routes[0].params;
-    
-    const correoResp = (correos as { correo: string }).correo;
-    
+    const { id } = useLocalSearchParams();
 
+    //const { correo } = useLocalSearchParams();
+    
+    console.log("Proyecto edit "+id)
     
     const [valores, setValores] = useState<Proyecto>({
-        correoResponsable: correoResp,
-        pName: '',
         descripcion: '',
         objetivoF: '',
-        montoReca: '0',
-        fechaLimite: '',
         categoriaP: '',
-        mediaItems: ["fyftyft"],
-        donaciones: [],
+        mediaItems: [""],
     });
 
-    const [open, setOpen] = useState(false);  
-    const [categoria, setCategoria] = useState('');  
+    const [open, setOpen] = useState(false);  // Estado para controlar el dropdown
+    const [categoria, setCategoria] = useState('');  // Estado para la categoría seleccionada
     const [categorias, setCategorias] = useState([
         { label: 'Tecnología', value: 'tecnologia' },
         { label: 'Salud', value: 'salud' },
@@ -62,7 +49,7 @@ const NuevoProyecto: React.FC = () => {
 
         console.log('Datos del proyecto a enviar:', nuevoProyecto);
         try {
-            const proyectoCreado = Crear(nuevoProyecto);
+            const proyectoCreado = 1
 
 
 
@@ -86,29 +73,14 @@ const NuevoProyecto: React.FC = () => {
         <ScrollView>
             <View style={styles.container}>
                 <View style={styles.container2}>
-                    <Text style={styles.title}>Nuevo Proyecto</Text>
+                    <Text style={styles.title}>Actualizar Proyecto</Text>
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nombre"
-                        onChangeText={text => handleInputChange(text, 'pName')}
-                        value={valores.pName}
-                    />
                     <TextInput
                         style={styles.input}
                         placeholder="Objetivo de recaudación"
                         onChangeText={text => handleInputChange(text, 'objetivoF')}
                         value={valores.objetivoF}
                     />
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Fecha límite"
-                        onChangeText={text => handleInputChange(text, 'fechaLimite')}
-                        value={valores.fechaLimite}
-                    />
-
 
 
                     <Text>Descripción</Text>
@@ -138,7 +110,7 @@ const NuevoProyecto: React.FC = () => {
                         }}
                     />
 
-                    <Button title="Crear" onPress={handleForm}  />
+                    <Button title="Actualizar" onPress={handleForm}  />
                 </View>
             </View>
         </ScrollView>

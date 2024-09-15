@@ -1,6 +1,7 @@
 import { Button, Card } from '@rneui/base';
 import { useLocalSearchParams } from 'expo-router';
 import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 
 interface Proyectos {
@@ -16,11 +17,18 @@ interface Proyectos {
 }
 
 export default function ProyectPage() {
+    const navigation = useNavigation();
     const { id } = useLocalSearchParams();
     const [amount, setAmount] = React.useState(1000);
     const [goal, setGoal] = React.useState(5000);
     const [project, setProject] = React.useState<Proyectos | null>(null);  // Cambiado a un solo objeto
     const [loading, setLoading] = React.useState(true);
+
+    console.log("id Proyecto mio"+id)
+    const navigateToProyecto = () => {
+        navigation.navigate('editarProyecto', { id: project._id });
+        
+    };
 
     const getProjects = async () => {
         try {
@@ -86,9 +94,13 @@ export default function ProyectPage() {
                         </View>
                     </View>
                     <View style={styles.card}>
+                        <Text style={styles.title}>Descripción</Text>
                         <Text style={{ fontSize: 22 }}>
                             {project.descripcion}
                         </Text>
+                    </View>
+                    <View>
+                    <Button title= "Editar" color='#8cc583' onPress={navigateToProyecto} />
                     </View>
                 </View>
             </ScrollView>
@@ -117,5 +129,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
 });
