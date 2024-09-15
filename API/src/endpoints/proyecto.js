@@ -68,9 +68,33 @@ router.put('/proyectos/:id/:correo/:name', async (req, res) => {
     /*const msg = {
         to: correo,
         from: 'gomezacunav@gmail.com',
-        subject: 'Fund a Cause: Proyecto actualizado',
-        text: `Su proyecto de Fund a Cause ha sido actualizado exitosamente`,
-        html: `<strong>Su proyecto de Fund a Cause ha sido actualizado exitosamente</strong>`
+        subject: '¡Su Proyecto en Fund a Cause ha sido Actualizado!',
+        text: 'Su proyecto en Fund a Cause ha sido actualizado exitosamente. Gracias por su continua dedicación.',
+        html: `
+            <html>
+        <body style="font-family: Arial, sans-serif; color: #333; padding: 20px; background-color: #f9f9f9;">
+            <div style="max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                <h2 style="color: #4CAF50;">¡Su Proyecto ha sido Actualizado!</h2>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Estimado/a,
+                </p>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Nos complace informarle que su proyecto en <strong>Fund a Cause</strong> ha sido actualizado exitosamente.
+                </p>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Gracias por su compromiso y esfuerzo continuo para hacer avanzar su causa. Estamos emocionados de ver el impacto de su proyecto.
+                </p>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Si tiene alguna pregunta o necesita asistencia adicional, no dude en ponerse en contacto con nuestro equipo de soporte.
+                </p>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Atentamente,<br>
+                    El equipo de Fund a Cause
+                </p>
+            </div>
+        </body>
+        </html>
+    `
         };
     
         try{

@@ -9,14 +9,16 @@ const router = express.Router();
 
 // Trae todos los Donaciones
 router.get('/donaciones', (req, res) => {
-    Donaciones.find()
+    esquemaDonacion.find()
         .then((donaciones) => res.json(donaciones))
         .catch((error) => res.status(500).json({ error: error.message }));
 });
 
 // Trae los Donaciones por correo
 router.get('/donaciones/:correo', (req, res) => {
-    Donaciones.find({ correoDonante: req.params.correo })
+    const correo = req.params.correo;
+    console.log("en el endpoint "+correo)
+    esquemaDonacion.find({ correoDonante: correo })
         .then((donaciones) => res.json(donaciones))
         .catch((error) => res.status(500).json({ error: error.message }));
 });
@@ -35,7 +37,7 @@ router.post('/donaciones/:responsable', (req, res) => {
     .then( async(donaciones) => {
 
         
-        /*res.json(donaciones)
+        res.json(donaciones)/*
         const msg = {
         to: donante,
         from: 'gomezacunav@gmail.com',
@@ -120,7 +122,7 @@ router.post('/donaciones/:responsable', (req, res) => {
 router.put('/donaciones/:id', (req, res) => {
     const { id } = req.params;
     const { link } = req.body;
-    Donaciones.updateOne({ _id: id }, { $set: { mediaLink: link } })
+    esquemaDonacion.updateOne({ _id: id }, { $set: { mediaLink: link } })
         .then(() => res.status(204).send())
         .catch((error) => res.status(500).json({ error: error.message }));
 });
@@ -128,7 +130,7 @@ router.put('/donaciones/:id', (req, res) => {
 // Delete a donation
 router.delete('/donaciones/:id', (req, res) => {
     const { id } = req.params;
-    Donaciones.deleteOne({ _id: id })
+    esquemaDonacion.deleteOne({ _id: id })
         .then(() => res.status(204).send())
         .catch((error) => res.status(500).json({ error: error.message }));
 });
