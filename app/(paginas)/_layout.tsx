@@ -40,7 +40,16 @@ export default function TabLayout() {
             title: 'Nuevo Proyecto',
           }}
         />
+        <Drawer.Screen
+          name= "historialDonaciones"
+          options={{
+            drawerLabel: 'Historial Donaciones',
+            title: 'Historial Donaciones',
+          }}
+        />
+      
       </Drawer>
+      
     </GestureHandlerRootView>
   );
 }
