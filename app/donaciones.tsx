@@ -9,7 +9,7 @@ import { Usuario } from '../app/interfaces/usuarios.interface';
 import { useNavigation, useRoute } from '@react-navigation/native';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 
-import DropDownPicker from 'react-native-dropdown-picker'; 
+import DropDownPicker from 'react-native-dropdown-picker';
 
 interface Donaciones {
     monto: string;
@@ -20,7 +20,7 @@ interface Donaciones {
     nombreProyecto: string;
     fechaDonacion: Date;
     comentario: string;
-    
+
 }
 
 
@@ -41,9 +41,9 @@ const NuevoProyecto: React.FC = () => {
         fechaDonacion: new Date(),
         comentario: '',
     });
-    
 
-    const handleForm = async() => {
+
+    const handleForm = async () => {
         const nuevaDonacion: Donaciones = {
             ...valores,
         };
@@ -51,28 +51,46 @@ const NuevoProyecto: React.FC = () => {
         //console.log('Datos de la donacion a enviar:', nuevaDonacion);
         try {
             //validar que tenag el dinero
-            const responseUsuario = await fetch('http://10.0.2.2:9000/api/usuarios/correo/'+ correo, {
+            const responseUsuario = await fetch('http://10.0.2.2:9000/api/usuarios/correo/' + correo, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                
+
             });
 
             const usuario = await responseUsuario.json();
             const dineroDisponible = usuario.dineroInicial;
             const montoDonacion = parseFloat(valores.monto);
 
-            
+
 
             if (dineroDisponible < montoDonacion) {
                 alert('No tienes suficiente dinero para realizar esta donación.');
                 return;
             }
 
+            //se trae el proyecto para tener los datos de este
+            const responseProyecto = await fetch('http://10.0.2.2:9000/api/proyectos/' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+            });
+            const proyecto = await responseProyecto.json();
+            const montoRecaudado = proyecto.montoReca;
+            const responsable =proyecto.correoResponsable;
+            const montoRecad = parseFloat(montoRecaudado);
+
+
+            let montoTotal = montoRecad + montoDonacion
+            let montoRecaS = montoTotal.toString();
+
+
 
             //hace la donacion
-            const response = await fetch('http://10.0.2.2:9000/api/donaciones', {
+            const response = await fetch('http://10.0.2.2:9000/api/donaciones/'+responsable, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,24 +103,6 @@ const NuevoProyecto: React.FC = () => {
 
             let nuevoMonto = dineroDisponible - montoDonacion
 
-            //se trae el proyecto para tener los datos de este
-            const responseProyecto = await fetch('http://10.0.2.2:9000/api/proyectos/'+ id, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                
-            });
-            const proyecto = await responseProyecto.json();
-            const montoRecaudado = proyecto.montoReca;
-            const montoRecad = parseFloat(montoRecaudado);
-
-            
-            let montoTotal= montoRecad + montoDonacion
-            let montoRecaS = montoTotal.toString();
-
-            //rebaja el dinero al usuario
-
             const responseDinero = await fetch(`http://10.0.2.2:9000/api/usuarios/actualizarDinero/${correo}`, {
                 method: 'PUT',
                 headers: {
@@ -110,37 +110,33 @@ const NuevoProyecto: React.FC = () => {
                 },
                 body: JSON.stringify({ nuevoMonto }),
             });
-    
+
             const usuarioActualizado = await response.json();
             console.log('Usuario actualizado:', usuarioActualizado);
-    
+
             //actualizar el monto de donacion en el proyecto
             
-            
-            
+
+
             // actualizar el monto del proyecto
-            const responseProyecto2 = await fetch('http://10.0.2.2:9000/api/proyectos/actualizarMonto/'+ id, {
-                
+            const responseProyecto2 = await fetch('http://10.0.2.2:9000/api/proyectos/actualizarMonto/' + id, {
+
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ montoRecaS }),
-                
+
             });
             const proyecto2 = await responseProyecto2.json();
-            console.log('Proyecto actualizado:', proyecto2); 
-
-
-
-
+            //console.log('Proyecto actualizado:', proyecto2); 
 
         } catch (error) {
             console.error('Error al hacer la donacion', error);
         }
     };
 
-    
+
     const handleInputChange = (
         value: string | number,
         campo: keyof Donaciones,
@@ -172,15 +168,15 @@ const NuevoProyecto: React.FC = () => {
                     />
 
 
-                    
-                    <TextInput 
-                        style={styles.input} 
-                        placeholder="Monto" 
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Monto"
                         inputMode='numeric'
-                        onChangeText={(text) => handleInputChange(text, 'monto')} 
+                        onChangeText={(text) => handleInputChange(text, 'monto')}
                         value={valores.monto}
                     />
-                
+
 
                     <Text>Comentario</Text>
                     <TextInput
@@ -192,13 +188,13 @@ const NuevoProyecto: React.FC = () => {
 
 
                     />
-                    
 
-                    <Button title="Donar" onPress={handleForm}  />
+
+                    <Button title="Donar" onPress={handleForm} />
                 </View>
             </View>
         </ScrollView>
-        
+
     );
 }
 const styles = StyleSheet.create({
