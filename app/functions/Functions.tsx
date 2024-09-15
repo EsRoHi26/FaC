@@ -66,7 +66,7 @@ export async function Crear(valores: any) {
                     'Content-Type': 'application/json'
                 }
             })
-                .then(res => res.json())
+                //.then(res => res.json())
                 .catch(error => console.error('Error:', error))
             alert("Proyecto creado con exito")
             //window.location.reload()

@@ -4,6 +4,7 @@ import { Button, Card } from '@rneui/base';
 import { Link } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 interface Proyectos {
     _id:string;
@@ -22,7 +23,7 @@ export default function ProyectScreen() {
     const navigation = useNavigation();
     const correos = navigation.getParent()?.getState().routes[0].params;
     
-    const correoResp = (correos as { correo: string }).correo;
+    const correoResp = (correos as { correo: string, carga:boolean }).correo;
     
     const s: string = correoResp;
 
@@ -47,6 +48,7 @@ export default function ProyectScreen() {
     };
 
     const getProjects = async () => {
+        setOtherProjects([]);
         try {
           const response = await fetch('http://10.0.2.2:9000/api/proyectos', {
             method: 'GET',
@@ -62,7 +64,6 @@ export default function ProyectScreen() {
               if (project.correoResponsable === correoResp) {
                 setOtherProjects((oldProjects) => [...oldProjects, project]);
               }
-              setLoading(false);
             }
             )});
         } catch (e) {
@@ -70,15 +71,23 @@ export default function ProyectScreen() {
         }
       }
 
-    React.useEffect(() => {
-        getProjects();
-    }, []);
 
+    if (loading) {
+        getProjects();
+        setLoading(false);
+        return (
+            <View>
+                <Text>Loading...</Text>
+            </View>
+        );
+    }
+    else {
+       // cleanProjects();
     return (
         <View>
             <View style={{ height: 700 }}>
                 <ScrollView>
-                    {!loading && otherProjects.map((project, i) => (
+                    {otherProjects.map((project, i) => (
                         <Link href={{
                             pathname: "/mpPage",
                             params: { id: project._id, name: project.pName }
@@ -104,6 +113,7 @@ export default function ProyectScreen() {
             </View>
         </View>
     );
+    }
 }
 
 const styles = StyleSheet.create({
