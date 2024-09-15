@@ -53,6 +53,7 @@ const NuevoProyecto: React.FC = () => {
         console.log('Datos del proyecto a enviar:', nuevoProyecto);
         try {
             const proyectoCreado = Crear(nuevoProyecto);
+            navigation.getParent()?.setParams({ carga: true});
 
 
 
