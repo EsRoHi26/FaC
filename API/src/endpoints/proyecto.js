@@ -6,7 +6,7 @@ const moment = require('moment');
 const router = express.Router(); 
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey("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");
-
+const CircularJSON = require('circular-json');
 
 //crear proyecto
 router.post('/proyectos',(req,res)=>{
@@ -92,290 +92,6 @@ router.delete('/proyectos/:id', (req, res) => {
     .catch((err)=> res.json(err));  
 });
 
-// crear tarea en un proyecto
-router.post('/proyectos/:id/tareas', (req, res) => {
-    const { id } = req.params;
-
-    const { nombre, descripcion, correoEncargado, puntos, estado, recursosEc,  tiempoEstimado} = req.body;
-
-    esquemaProyecto.findById(id)
-        .then((proyecto) => {
-            if (!proyecto) {
-                return res.status(404).json({ error: "Proyecto no encontrado" });
-            }
-
-            const nuevaTarea = {
-                nombre,
-                descripcion,
-                correoEncargado,
-                puntos,
-                estado,
-                recusosEc,
-                tiempoEstimado
-            };
-
-            proyecto.tareas = proyecto.tareas || []; 
-            proyecto.tareas.push(nuevaTarea);
-
-            const emails = proyecto.correoColaboradores || [];
-            console.log(emails);
-
-            proyecto.save();
-            const correosAEnviar = emails.map(email => {
-                const msg = {
-                    to: email,
-                    from: 'vision.reque.no.reply@gmail.com',
-                    subject: 'Nueva tarea creada',
-                    text: `Se ha creado una nueva tarea llamada ${nombre} en el proyecto ${proyecto.nombre}.`,
-                    html: `Se ha creado una nueva tarea llamada ${nombre} en el proyecto ${proyecto.nombre}.`
-                };
-                return sgMail.send(msg);
-            });
-            return Promise.all(correosAEnviar)
-                .then(() => {
-                    //return proyecto.save();
-                })
-                .then((proyecto) => res.json(proyecto)) 
-                .catch((error) => res.json(error));
-        });
-});
-
-
-// obtener una tarea de un proyecto
-router.get('/proyectos/:id/tareas/:idTarea', (req, res) => {
-    const { id, idTarea } = req.params;
-
-    esquemaProyecto.findById(id)
-        .then((proyecto) => {
-            if (!proyecto || !proyecto.tareas) {
-                return res.status(404).json({ error: "Proyecto o tarea no encontrada" });
-            }
-
-            const tareaEncontrada = proyecto.tareas.find(tarea => tarea._id == idTarea);
-
-            if (!tareaEncontrada) {
-                return res.status(404).json({ error: "Tarea no encontrada" });
-            }
-
-            return res.json(tareaEncontrada);
-        })
-        .catch((error) => res.json(error));
-});
-
-
-// notificaciones de donacion a un proyecto
-router.put('/proyectos/:id/tareasEstado/:idTarea', (req, res) => {
-    let { estado } = req.body;
-    const { id, idTarea } = req.params;
-
-    
-            esquemaProyecto.findById(id)
-                .then((proyecto) => {
-                    if (!proyecto) {
-                        return res.status(404).json({ error: "Proyecto no encontrado" });
-                    }
-
-                    const tarea = proyecto.tareas.find(tarea => tarea._id == idTarea);
-
-                    if (!tarea) {
-                        return res.status(404).json({ error: "Tarea no encontrada" });
-                    }
-                    if (estado) { 
-                        tarea.estado = estado; 
-                        if (estado === 'Finalizada') {
-                            const emails = proyecto.correoColaboradores || [];
-                            console.log(emails);
-                            
-                            const correosAEnviar = emails.map(email => {
-                            const msg = {
-                                to: email,
-                                from: 'vision.reque.no.reply@gmail.com',
-                                subject: 'Tarea Finalizada',
-                                text: `Se ha finalizado la tarea llamada ${tarea.nombre} en el proyecto ${proyecto.nombre}.`,
-                                html: `Se ha finalizado la tarea llamada ${tarea.nombre} en el proyecto ${proyecto.nombre}.`
-                        };
-                        return sgMail.send(msg);
-                    });
-                    return Promise.all([...correosAEnviar, proyecto.save()]);
-                } else {
-                    return proyecto.save();
-                }
-            }
-        })
-        .then(() => res.json({ message: 'Operation successful' }))
-        .catch((error) => res.json(error));
-});
-
-
-// actualizar encargado de una tarea en el proyecto
-router.put('/proyectos/:id/tareasEncargado/:idTarea', (req, res) => {
-    let { correoEncargado } = req.body;
-    const { id, idTarea } = req.params;
-
-    
-            esquemaProyecto.findById(id)
-                .then((proyecto) => {
-                    if (!proyecto) {
-                        return res.status(404).json({ error: "Proyecto no encontrado" });
-                    }
-
-                    const tarea = proyecto.tareas.find(tarea => tarea._id == idTarea);
-
-                    if (!tarea) {
-                        return res.status(404).json({ error: "Tarea no encontrada" });
-                    }
-
-                    if (correoEncargado) { tarea.correoEncargado = correoEncargado; }
-                    
-
-                    proyecto.save()
-                        .then(() => res.json(proyecto))
-                        .catch((error) => res.json(error));
-                })
-                .catch((error) => res.json(error));
-        
-});
-
-
-// actualizar una tarea en el proyecto
-router.put('/proyectos/:id/tareas/:idTarea', (req, res) => {
-    let { nombre, descripcion, correoEncargado, puntos, estado } = req.body;
-    const { id, idTarea } = req.params;
-
-    
-            esquemaProyecto.findById(id)
-                .then((proyecto) => {
-                    if (!proyecto) {
-                        return res.status(404).json({ error: "Proyecto no encontrado" });
-                    }
-
-                    const tarea = proyecto.tareas.find(tarea => tarea._id == idTarea);
-
-                    if (!tarea) {
-                        return res.status(404).json({ error: "Tarea no encontrada" });
-                    }
-
-                    // Actualizamos los campos de la tarea que hemos recibido si están definidos
-                    if (nombre) {   tarea.nombre = nombre; }
-                    if (descripcion) { tarea.descripcion = descripcion; }
-                    if (correoEncargado) { tarea.correoEncargado = correoEncargado; }
-                    if (puntos !== undefined) { tarea.puntos = puntos; }
-                    if (estado) { tarea.estado = estado; }
-
-                    proyecto.save()
-                        .then(() => res.json(proyecto))
-                        .catch((error) => res.json(error));
-                })
-                .catch((error) => res.json(error));
-    
-});
-
-// eliminar una tarea en el proyecto
-router.get('/proyectos/:id/tareasD/:idTarea', (req, res) => {
-    const { id, idTarea } = req.params;
-
-    esquemaProyecto.findById(id)
-        .then((proyecto) => {
-            const i = proyecto.tareas.findIndex(tarea => tarea._id == idTarea);
-
-            if (i === -1) {
-                return res.status(404).json({ error: "Tarea no encontrada" });
-            }
-
-            proyecto.tareas.splice(i, 1);
-            proyecto.save()
-                .then(() => res.json(proyecto))
-                .catch((error) => res.json(error));
-        })
-        .catch((error) => res.json(error));
-});
-
-// obtener todas las tareas de un proyecto
-router.get("/proyectos/:id/tareas", (req, res) => {
-    const { id } = req.params;
-
-    esquemaProyecto.findById(id)
-        .then((proyecto) => {
-            if (!proyecto) {
-                return res.status(404).json({ error: "Proyecto no encontrado" });
-            }
-            return res.json(proyecto.tareas);
-        })
-        .catch((error) => res.json(error));
-}); 
-
-// informacion para el burndown chart
-router.get('/proyectos/:id/burndownC', (req, res) => {
-    const { id } = req.params;
-
-    esquemaProyecto.findById(id)
-        .then((proyecto) => {
-            if (!proyecto) {
-                return res.status(404).json({ error: "Proyecto no encontrado" });
-            }
-            let listTareas = proyecto.tareas;
-
-            let diasTrabajo = moment(proyecto.fechaFin).diff(moment(proyecto.fechaInicio),'days');
-            if (diasTrabajo <= 1) {
-                diasTrabajo=15
-            }
-
-            console.log(listTareas);
-            console.log(diasTrabajo);
-            // Ordenar por fecha de inicio y asignar el valor de días restantes a cada tarea
-            listTareas.sort((a, b) => a.fechaInicio - b.fechaInicio);
-            
-            let puntos = 0; 
-            for (const tarea of listTareas) {
-                puntos+= tarea.puntos;
-            };
-            console.log(puntos);
-            
-            //definicion de listas de tareas por estado  y puntos completados
-            let listTareasCompletadas = [];
-            let listTareasEnCurso = [];
-            let listTareasPendientes = [];
-            let puntosCompletados = 0;
-            let puntosPendientes = puntos;
-
-            for (const tarea of listTareas) {
-                if (tarea.estado === "Finalizada") {
-                    listTareasCompletadas.push(tarea);
-                    puntosCompletados += tarea.puntos;
-                    puntosPendientes = puntos - puntosCompletados;
-                }
-                else if (tarea.estado === "En curso") {
-                    listTareasEnCurso.push(tarea);
-                }
-                else{
-                    listTareasPendientes.push(tarea);
-                }
-            };
-            console.log(listTareasCompletadas);
-            console.log(listTareasEnCurso);
-            console.log(listTareasPendientes);
-
-            const burndown = {
-                ejeX: diasTrabajo,
-                ejeY: puntos,
-                tareasCompletadas: listTareasCompletadas,
-                tareasEnCurso: listTareasEnCurso,
-                tareasPendientes: listTareasPendientes,
-                puntosCompletados: puntosCompletados,
-                puntosPendientes: puntosPendientes
-            };
-    
-            return res.json(burndown);
-            
-
-
-
-
-
-        })
-        .catch((error) => res.json(error));
-
-});
 
 //informe general
 router.get('/informeG', (req, res) => {
@@ -488,6 +204,61 @@ router.get('/informe-general', (req, res) => {
         .catch(error => res.json(error));
 });
 //revisar si tiene proyecto 
+
+
+// actualizar monto recaudado
+/*router.put('/proyectos/actualizarMonto/:id',  (req, res) => {
+    const { id } = req.params; // ID del proyecto a actualizar
+    const { montoRecaS } = req.body; // Monto recaudado nuevo
+
+    console.log("ID del proyecto:", id);
+    console.log("Monto a actualizar:", montoRecaS);
+    console.log("en el maldito endpoint");
+    
+    try {
+        const objectId = mongoose.Types.ObjectId(id);
+        // Actualizar solo el campo montoReca
+        const proyectoActualizado =  Proyecto.findOneAndUpdate(
+            { _id: objectId },
+            { $set: { montoReca: montoRecaS } },
+            { new: true }
+        );
+
+        if (!proyectoActualizado) {
+            return res.status(404).json({ mensaje: 'Proyecto no encontrado' });
+        }
+
+        res.json(proyectoActualizado);
+    } catch (error) {
+        console.error('Error al actualizar el proyecto:', error);
+        res.status(500).json({ mensaje: 'Error al actualizar el proyecto', error });
+    }
+});*/
+
+// actualizar montoReca
+router.put('/proyectos/actualizarMonto/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { montoRecaS } = req.body;
+
+        // Asegurarse de esperar la resolución de la promesa
+        const proyectoActualizado = await esquemaProyecto.findByIdAndUpdate(
+            id,
+            { $set: { montoReca: montoRecaS } },
+            { new: true }
+        );
+
+        if (!proyectoActualizado) {
+            return res.status(404).json({ mensaje: 'Proyecto no encontrado' });
+        }
+
+        // Enviar respuesta como JSON
+        res.json(CircularJSON.stringify(proyectoActualizado));
+    } catch (error) {
+        console.error("Error al actualizar el proyecto:", error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
 
 
 module.exports = router;

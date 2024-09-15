@@ -1,8 +1,10 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Text, View, ScrollView } from 'react-native';
 import { Button, Card } from '@rneui/base';
-import { Link, useNavigation } from 'expo-router';
-import React from 'react';
+import { Link} from 'expo-router';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import React, { useCallback } from 'react';
+
 
 interface Proyectos {
   _id: string;
@@ -26,6 +28,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const correo = navigation.getParent()?.getState().routes[0].params;
   const correoResp = (correo as { correo: string }).correo;
+  const s: string = correoResp;
 
   const getProjects = async () => {
     try {
@@ -38,8 +41,7 @@ export default function HomeScreen() {
         const projectDetails = await response.json();
         setProjects(projectDetails);
         await projectDetails.forEach((project:Proyectos) => {
-          console.log(project.correoResponsable);
-          console.log(correoResp);
+          
           if (project.correoResponsable !== correoResp) {
             setOtherProjects((oldProjects) => [...oldProjects, project]);
           }
@@ -55,6 +57,13 @@ export default function HomeScreen() {
     getProjects();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+        getProjects();
+        setLoading(false);
+    }, [correoResp])
+);
+
   return (
     <View>
       <View style={{ height: 700 }}>
@@ -62,7 +71,7 @@ export default function HomeScreen() {
           {!loading && otherProjects.map((project, i) => (
             <Link href={{
               pathname: "/pPage",
-              params: { id: project._id, name: project.pName }
+              params: { id: project._id, name: project.pName, correo: s }
             }} key={i} asChild>
               <Pressable>
                 <Card key={i}>
