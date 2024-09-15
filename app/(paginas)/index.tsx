@@ -85,9 +85,7 @@ export default function HomeScreen() {
           ))}
         </ScrollView>
       </View>
-      <View style={{ width: 200, alignContent: 'center', marginHorizontal: 110, marginTop: 20 }}>
-        <Button title="solid">Historial</Button>
-      </View>
+      
     </View>
   );
 }

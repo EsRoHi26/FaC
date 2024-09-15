@@ -63,9 +63,33 @@ router.post('/usuarios/', async (req, res) => {
         /*const msg = {
         to: usuario.email,
         from: 'gomezacunav@gmail.com',
-        subject: 'Fund a Cause: Usuario creado',
-        text: `Su usuario de Fund a Cause ha sido creado exitosamente`,
-        html: `<strong>Su usuario de Fund a Cause ha sido creado exitosamente</strong>`
+        subject: '¡Bienvenido a Fund a Cause!',
+        text: 'Su cuenta en Fund a Cause ha sido creada exitosamente. Gracias por unirse a nuestra comunidad.',
+        html: `
+            <html>
+        <body style="font-family: Arial, sans-serif; color: #333; padding: 20px; background-color: #f9f9f9;">
+            <div style="max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                <h2 style="color: #4CAF50;">¡Bienvenido a Fund a Cause!</h2>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Estimado/a <strong>${usuario.nombre}</strong>,
+                </p>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Nos complace informarle que su cuenta en <strong>Fund a Cause</strong> ha sido creada exitosamente.
+                </p>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Ahora podrá acceder a todas las funciones de nuestra plataforma y empezar a apoyar causas importantes.
+                </p>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Si tiene alguna pregunta o necesita asistencia, no dude en ponerse en contacto con nuestro equipo de soporte.
+                </p>
+                <p style="font-size: 16px; line-height: 1.5;">
+                    Atentamente,<br>
+                    El equipo de Fund a Cause
+                </p>
+            </div>
+        </body>
+        </html>
+    `
         };
     
         try{
