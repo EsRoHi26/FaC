@@ -3,20 +3,20 @@ const esquemaProyecto = require('../modelosDatos/proyecto');
 const Usuario = require('../modelosDatos/Usuario');
 const { ExplainVerbosity } = require('mongodb');
 const moment = require('moment');
-const router = express.Router(); 
+const router = express.Router();
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey("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");
 const CircularJSON = require('circular-json');
 
 //crear proyecto
-router.post('/proyectos',(req,res)=>{
+router.post('/proyectos', (req, res) => {
 
     const proyecto = esquemaProyecto(req.body); // Create a new instance of the esquemaProyecto model
 
     proyecto.save()
-    .then(()=> {res.json(proyecto)})
-    .catch((error)=> res.json(error));
-    
+        .then(() => { res.json(proyecto) })
+        .catch((error) => res.json(error));
+
 
 
 });
@@ -24,22 +24,22 @@ router.post('/proyectos',(req,res)=>{
 //obtener los proyectos
 router.get('/proyectos', (req, res) => {
     esquemaProyecto.find()
-    .then((proyectos) => res.json(proyectos))
-    .catch((error) => res.json(error));
+        .then((proyectos) => res.json(proyectos))
+        .catch((error) => res.json(error));
 });
 
 //obtener lista de los Id de los proyectos
 router.get('/proyectosId', (req, res) => {
     let ids_proyec = [];
-    
+
     esquemaProyecto.find()
         .select("id")
         .exec()
         .then((idsProyecto) => {
-            for (let i=0; i<idsProyecto.length; i++){
+            for (let i = 0; i < idsProyecto.length; i++) {
                 ids_proyec.push(idsProyecto[i].id);
             }
-            res.json({Ids: ids_proyec});
+            res.json({ Ids: ids_proyec });
         })
         .catch((error) => res.json(error));
 });
@@ -49,8 +49,8 @@ router.get('/proyectos/:id', (req, res) => {
     const { id } = req.params;
 
     esquemaProyecto.findById(id)
-    .then((proyectos) => res.json(proyectos))
-    .catch((error) => res.json(error));
+        .then((proyectos) => res.json(proyectos))
+        .catch((error) => res.json(error));
 
 });
 
@@ -61,10 +61,10 @@ router.put('/proyectos/:id/:correo/:name', async (req, res) => {
     const { name } = req.params;
     const { descripcion, objetivoF, categoriaP, mediaItems } = req.body;
 
-    esquemaProyecto.updateOne({_id: id}, { $set: {descripcion, objetivoF, categoriaP, mediaItems}})
-        .then(()=>{res.json({mensaje: 'Proyecto actualizado'})} )
-        .catch((err)=> res.json(err));  
-    
+    esquemaProyecto.updateOne({ _id: id }, { $set: { descripcion, objetivoF, categoriaP, mediaItems } })
+        .then(() => { res.json({ mensaje: 'Proyecto actualizado' }) })
+        .catch((err) => res.json(err));
+
     /*const msg = {
         to: correo,
         from: 'gomezacunav@gmail.com',
@@ -87,9 +87,9 @@ router.put('/proyectos/:id/:correo/:name', async (req, res) => {
 router.delete('/proyectos/:id', (req, res) => {
     const { id } = req.params;
 
-    esquemaProyecto.remove({_id: id})
-    .then(()=>{res.json({mensaje: 'Proyecto eliminado'})} )
-    .catch((err)=> res.json(err));  
+    esquemaProyecto.remove({ _id: id })
+        .then(() => { res.json({ mensaje: 'Proyecto eliminado' }) })
+        .catch((err) => res.json(err));
 });
 
 
@@ -103,11 +103,11 @@ router.get('/informeG', (req, res) => {
     esquemaProyecto.find()
         .then((proyectos) => {
             for (let i = 0; i < proyectos.length; i++) {
-                
-                
+
+
                 listTareas = proyectos[i].tareas;
-                
-                
+
+
                 for (const tarea of listTareas) {
                     //console.log(tarea)
                     if (tarea.estado === "Finalizada") {
@@ -120,8 +120,8 @@ router.get('/informeG', (req, res) => {
                         contadorPendientes += 1
                     }
                 };
-                
-                
+
+
             }
             const informeGen = {
                 tareasFinalizadas: contadorFinalizadas,
@@ -140,22 +140,22 @@ router.post('/agregarusuarioP', (req, res) => {
     console.log(idProyecto);
     esquemaProyecto.findById(idProyecto)
         .then((proyecto) => { //revisa que el usuario no este ya en el proyecto
-            if (proyecto.correoColaboradores.length>0){
+            if (proyecto.correoColaboradores.length > 0) {
                 for (let i = 0; i < proyecto.correoColaboradores.length; i++) {
                     if (proyecto.correoColaboradores == email) {
                         return res.status(400).json({ error: "El usuario ya está en el proyecto" });
                     }
                 }
             }
-            
+
 
             proyecto.correoColaboradores.push(email);
             proyecto.save()
-            .then(() => res.json({ mensaje: "Usuario agregado al proyecto" }))
+                .then(() => res.json({ mensaje: "Usuario agregado al proyecto" }))
                 .catch((error) => res.json(error));
         })
-    });
-    // eliminar miembro del proyecto
+});
+// eliminar miembro del proyecto
 router.delete('/eliminarMiembroP', (req, res) => {
     const { idProyecto, idUsuario } = req.body;
 
@@ -173,8 +173,8 @@ router.delete('/eliminarMiembroP', (req, res) => {
             } else {
                 proyecto.miembros.splice(indice, 1);
                 proyecto.save()
-                .then(() => res.json({ mensaje: "Usuario eliminado del proyecto" }))
-                .catch((error) => res.json(error));
+                    .then(() => res.json({ mensaje: "Usuario eliminado del proyecto" }))
+                    .catch((error) => res.json(error));
             }
         });
 });
@@ -203,37 +203,7 @@ router.get('/informe-general', (req, res) => {
         })
         .catch(error => res.json(error));
 });
-//revisar si tiene proyecto 
 
-
-// actualizar monto recaudado
-/*router.put('/proyectos/actualizarMonto/:id',  (req, res) => {
-    const { id } = req.params; // ID del proyecto a actualizar
-    const { montoRecaS } = req.body; // Monto recaudado nuevo
-
-    console.log("ID del proyecto:", id);
-    console.log("Monto a actualizar:", montoRecaS);
-    console.log("en el maldito endpoint");
-    
-    try {
-        const objectId = mongoose.Types.ObjectId(id);
-        // Actualizar solo el campo montoReca
-        const proyectoActualizado =  Proyecto.findOneAndUpdate(
-            { _id: objectId },
-            { $set: { montoReca: montoRecaS } },
-            { new: true }
-        );
-
-        if (!proyectoActualizado) {
-            return res.status(404).json({ mensaje: 'Proyecto no encontrado' });
-        }
-
-        res.json(proyectoActualizado);
-    } catch (error) {
-        console.error('Error al actualizar el proyecto:', error);
-        res.status(500).json({ mensaje: 'Error al actualizar el proyecto', error });
-    }
-});*/
 
 // actualizar montoReca
 router.put('/proyectos/actualizarMonto/:id', async (req, res) => {
