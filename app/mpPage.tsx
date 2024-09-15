@@ -1,12 +1,74 @@
 import { Button, Card } from '@rneui/base';
 import { useLocalSearchParams } from 'expo-router';
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 
+interface Proyectos {
+    correoResponsable: string;
+    pName: string;
+    descripcion: string;
+    objetivoF: string;
+    montoReca: string;
+    fechaLimite: string;
+    categoriaP: string;
+    mediaItems: string[];
+    donaciones: string[];
+}
+
 export default function ProyectPage() {
+
     const { id, name } = useLocalSearchParams();
+
     const [amount, setAmount] = React.useState(1000);
     const [goal, setGoal] = React.useState(5000);
+    const [project, setProject] = React.useState<Proyectos | null>(null);  // Cambiado a un solo objeto
+    const [loading, setLoading] = React.useState(true);
+
+    console.log("id Proyecto mio"+id)
+    const navigateToProyecto = () => {
+        navigation.navigate('editarProyecto', { id: project._id });
+        
+    };
+
+    const getProjects = async () => {
+        try {
+            const response = await fetch('http://10.0.2.2:9000/api/proyectos/' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const data = await response.json();
+            
+            setProject(data);  
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    React.useEffect(() => {
+        getProjects();
+    }, []);
+
+    if (loading) {
+        return (
+            <View style={styles.loading}>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text>Cargando proyecto...</Text>
+            </View>
+        );
+    }
+
+    if (!project) {
+        return (
+            <View style={styles.error}>
+                <Text>No se encontró el proyecto</Text>
+            </View>
+        );
+    }
 
     return (
         <View>
@@ -20,21 +82,25 @@ export default function ProyectPage() {
                             <Card>
                                 <Card.Title><Text style={{ fontSize: 25, textDecorationStyle: 'double' }}>Monto Meta</Text></Card.Title>
                                 <Card.Divider />
-                                <Text style={{ fontSize: 20, textAlign: 'center' }}>${goal}</Text>
+                                <Text style={{ fontSize: 20, textAlign: 'center' }}>${project.objetivoF}</Text>
                             </Card>
                         </View>
                         <View style={{ alignItems: 'center', flex: 1 }}>
                             <Card>
-                                <Card.Title><Text style={{ fontSize: 25, textDecorationStyle: 'double' }}>Actualmente</Text></Card.Title>
+                                <Card.Title><Text style={{ fontSize: 25, textDecorationStyle: 'double' }}>Monto Recaudado</Text></Card.Title>
                                 <Card.Divider />
-                                <Text style={{ fontSize: 20, textAlign: 'center' }}>${amount}</Text>
+                                <Text style={{ fontSize: 20, textAlign: 'center' }}>${project.montoReca}</Text>
                             </Card>
                         </View>
                     </View>
                     <View style={styles.card}>
-                        <Text style={{ fontSize: 22}}>
-                            Este es un ejemplo de texto largo para ver como se comporta el texto en la pantalla.
+                        <Text style={styles.title}>Descripción</Text>
+                        <Text style={{ fontSize: 22 }}>
+                            {project.descripcion}
                         </Text>
+                    </View>
+                    <View>
+                    <Button title= "Editar" color='#8cc583' onPress={navigateToProyecto} />
                     </View>
                 </View>
             </ScrollView>
@@ -53,5 +119,19 @@ const styles = StyleSheet.create({
         padding: 10,
         shadowColor: 'black',
         backgroundColor: 'white',
-    }
+    },
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    error: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
 });
