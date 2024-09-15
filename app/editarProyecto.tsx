@@ -62,7 +62,7 @@ const NuevoProyecto: React.FC = () => {
 
 
         } catch (error) {
-            console.error('Error al crear el proyecto:', error);
+            console.error('Error al modificar el proyecto:', error);
         }
     };
 
