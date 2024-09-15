@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const esquemaDonacion = mongoose.Schema({
     
     monto: {
-        type: Number, // Cambiado a Number para coincidir con el tipo de datos original
+        type: String, 
         required: true
     },
     correoDonante: {
@@ -27,8 +27,11 @@ const esquemaDonacion = mongoose.Schema({
         required: true
     },
     fechaDonacion: {
-        type: Date, // Cambiado a Date para manejar correctamente la fecha
+        type: Date, 
         required: true
+    },
+    comentario: {
+        type: String
     }
 });
 

@@ -1,8 +1,8 @@
 const express = require('express');
 const esquemaUsuario = require('../modelosDatos/Usuario');
 const router = express.Router();
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey("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");
+//const sgMail = require('@sendgrid/mail');
+//sgMail.setApiKey("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");
 
 
 // Trae todos los usuarios
@@ -15,9 +15,14 @@ router.get('/usuarios', (req, res) => {
 // Trae los usuarios por correo
 router.get('/usuarios/correo/:correo', (req, res) => {
     const { correo } = req.params;
-    esquemaUsuario.find({ email: correo })
-        .then((usuarios) => res.json(usuarios))
-        .catch((error) => res.json(error));
+    esquemaUsuario.findOne({ email: correo }) // Usar findOne para obtener un solo usuario
+    .then((usuario) => {
+        if (!usuario) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        res.json(usuario);
+    })
+    .catch((error) => res.status(500).json(error));
 });
 
 // Actualizar dinero inicial de usuario
@@ -162,6 +167,25 @@ router.get('/usuariosMP/:email', (req, res)=>{
     .catch((error) => res.json(error));
     
 
+});
+
+router.put('/usuarios/actualizarDinero/:correo', (req, res) => {
+    const { correo } = req.params;
+    const { nuevoMonto } = req.body;
+
+    
+    esquemaUsuario.findOneAndUpdate(
+        { email: correo },          
+        { $set: { dineroInicial: nuevoMonto } },  
+        { new: true }               
+    )
+    .then((usuarioActualizado) => {
+        if (!usuarioActualizado) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+        res.json(usuarioActualizado); 
+    })
+    .catch((error) => res.status(500).json({ message: 'Error al actualizar el dinero.', error }));
 });
 
 module.exports = router;

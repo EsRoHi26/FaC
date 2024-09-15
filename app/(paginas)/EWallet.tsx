@@ -1,51 +1,50 @@
 import { BackgroundImage, Button, Card, color } from '@rneui/base';
 import { getBackgroundColorAsync } from 'expo-system-ui';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Usuario } from '../interfaces/usuarios.interface';
 
-interface email{
+interface email {
     correo: string;
 }
 
-function TestPage () {
+function TestPage() {
     const [monto, setMonto] = React.useState("0");
     const [montoTxt, setMontoTxt] = React.useState("0");
     // let montoTxt = "1000"
 
-    const getMoney = (mail:string) => {
-        const link:string = 'http://10.0.2.2:9000/api/usuarios/correo/'+mail;
-        console.log(link);
-        fetch(link , {
+    const getMoney = async (mail: string) => {
+        const responseUsuario = await fetch('http://10.0.2.2:9000/api/usuarios/correo/' + mail, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
-        }).then((response) => {
-            if (response.status === 200) {
-                console.log('Usuario encontrado');
-                response.json().then((data) => {
-                    //console.log(data);
-                    console.log(data[0].dineroInicial);
-                    setMontoTxt(data[0].dineroInicial);
-                    return data[0].dineroInicial;
-                });
-            } else {
-                throw new Error('Usuario no encontrado');
-            }
-        })
+
+        });
+        const usuario = await responseUsuario.json();
+        const dineroDisponible = usuario.dineroInicial;
+        setMontoTxt(dineroDisponible);
+        return dineroDisponible;
+
     }
 
+
     const navigation = useNavigation();
-    const correo= navigation.getParent()?.getState().routes[0].params;
+    const correo = navigation.getParent()?.getState().routes[0].params;
     const correoResp = (correo as { correo: string }).correo;
-    getMoney(correoResp);
+    useFocusEffect(
+        useCallback(() => {
+            if (correoResp) {
+                getMoney(correoResp);
+            }
+        }, [correoResp])
+    );
 
     const add = () => {
         const newMontoTxt = (parseInt(monto) + parseInt(montoTxt)).toString();
 
-        fetch('http://10.0.2.2:9000/api/usuarios/dinero/'+correoResp, {
+        fetch('http://10.0.2.2:9000/api/usuarios/dinero/' + correoResp, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

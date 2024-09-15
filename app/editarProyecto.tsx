@@ -4,46 +4,32 @@ import { View, TextInput, StyleSheet, Text, ScrollView } from 'react-native';
 import { Button } from '@rneui/themed';
 import RadioGroup from 'react-native-radio-buttons-group';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
-import { Usuario } from '../interfaces/usuarios.interface';
 //import DateTimePicker from '@react-native-community/datetimepicker';
-import { Crear } from '../functions/Functions';
-import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker'; 
+import { useNavigation, useRoute } from '@react-navigation/native';
+import DropDownPicker from 'react-native-dropdown-picker'; // Importar DropDownPicker
+
 interface Proyecto {
-    correoResponsable: string;
-    pName: string;
     descripcion: string;
     objetivoF: string;
-    montoReca: string;
-    fechaLimite: string;
     categoriaP: string;
     mediaItems: string[];
-    donaciones: string[];
 }
 
 const NuevoProyecto: React.FC = () => {
-
-    //const { correo } = useLocalSearchParams();
     const navigation = useNavigation();
-    const correos = navigation.getParent()?.getState().routes[0].params;
-    
-    const correoResp = (correos as { correo: string }).correo;
-    
+    const route = useRoute();
+    const { id, name, correo } = route.params;
+    //const { id } = useLocalSearchParams();
 
     
     const [valores, setValores] = useState<Proyecto>({
-        correoResponsable: correoResp,
-        pName: '',
         descripcion: '',
         objetivoF: '',
-        montoReca: '0',
-        fechaLimite: '',
         categoriaP: '',
-        mediaItems: ["fyftyft"],
-        donaciones: [],
+        mediaItems: [""],
     });
-
-    const [open, setOpen] = useState(false);  
+    const [loading, setLoading] = React.useState(true);
+    const [open, setOpen] = useState(false); 
     const [categoria, setCategoria] = useState('');  
     const [categorias, setCategorias] = useState([
         { label: 'Tecnología', value: 'tecnologia' },
@@ -54,7 +40,9 @@ const NuevoProyecto: React.FC = () => {
         { label: 'Otro', value: 'otro' }
     ]);
 
-    const handleForm = () => {
+    
+
+    const handleForm = async () => {
         const nuevoProyecto: Proyecto = {
             ...valores,
             categoriaP: categoria,
@@ -62,13 +50,19 @@ const NuevoProyecto: React.FC = () => {
 
         console.log('Datos del proyecto a enviar:', nuevoProyecto);
         try {
-            const proyectoCreado = Crear(nuevoProyecto);
-            navigation.getParent()?.setParams({ carga: true});
+            const response = await fetch('http://10.0.2.2:9000/api/proyectos/' + id + '/' + correo + '/' + name, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoProyecto),
+            });
+            alert('Proyecto modificado con exito!');
 
 
 
         } catch (error) {
-            console.error('Error al crear el proyecto:', error);
+            console.error('Error al modificar el proyecto:', error);
         }
     };
 
@@ -87,29 +81,14 @@ const NuevoProyecto: React.FC = () => {
         <ScrollView>
             <View style={styles.container}>
                 <View style={styles.container2}>
-                    <Text style={styles.title}>Nuevo Proyecto</Text>
+                    <Text style={styles.title}>Actualizar Proyecto</Text>
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nombre"
-                        onChangeText={text => handleInputChange(text, 'pName')}
-                        value={valores.pName}
-                    />
                     <TextInput
                         style={styles.input}
                         placeholder="Objetivo de recaudación"
                         onChangeText={text => handleInputChange(text, 'objetivoF')}
                         value={valores.objetivoF}
                     />
-
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Fecha límite"
-                        onChangeText={text => handleInputChange(text, 'fechaLimite')}
-                        value={valores.fechaLimite}
-                    />
-
 
 
                     <Text>Descripción</Text>
@@ -139,7 +118,7 @@ const NuevoProyecto: React.FC = () => {
                         }}
                     />
 
-                    <Button title="Crear" onPress={handleForm}  />
+                    <Button title="Actualizar" onPress={handleForm}  />
                 </View>
             </View>
         </ScrollView>
