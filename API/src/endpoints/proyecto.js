@@ -5,7 +5,7 @@ const { ExplainVerbosity } = require('mongodb');
 const moment = require('moment');
 const router = express.Router(); 
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey("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");
+sgMail.setApiKey("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");
 
 
 //crear proyecto
@@ -55,14 +55,32 @@ router.get('/proyectos/:id', (req, res) => {
 });
 
 //actualizar un proyecto
-router.put('/proyectos/:id', (req, res) => {
+router.put('/proyectos/:id/:correo/:name', async (req, res) => {
     const { id } = req.params;
-
+    const { correo } = req.params;
+    const { name } = req.params;
     const { descripcion, objetivoF, categoriaP, mediaItems } = req.body;
 
-    esquemaUsuario.updateOne({_id: id}, { $set: {descripcion, objetivoF, categoriaP, mediaItems}})
+    esquemaProyecto.updateOne({_id: id}, { $set: {descripcion, objetivoF, categoriaP, mediaItems}})
         .then(()=>{res.json({mensaje: 'Proyecto actualizado'})} )
         .catch((err)=> res.json(err));  
+    
+    /*const msg = {
+        to: correo,
+        from: 'gomezacunav@gmail.com',
+        subject: 'Fund a Cause: Proyecto actualizado',
+        text: `Su proyecto de Fund a Cause ha sido actualizado exitosamente`,
+        html: `<strong>Su proyecto de Fund a Cause ha sido actualizado exitosamente</strong>`
+        };
+    
+        try{
+            
+            await sgMail.send(msg);
+            console.log('Correo enviado con éxito');
+        }
+        catch(error){
+            console.log(error);
+        }*/
 });
 
 //eliminar un proyecto

@@ -5,7 +5,7 @@ import { Button } from '@rneui/themed';
 import RadioGroup from 'react-native-radio-buttons-group';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 //import DateTimePicker from '@react-native-community/datetimepicker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import DropDownPicker from 'react-native-dropdown-picker'; // Importar DropDownPicker
 
 interface Proyecto {
@@ -16,12 +16,11 @@ interface Proyecto {
 }
 
 const NuevoProyecto: React.FC = () => {
+    const navigation = useNavigation();
+    const route = useRoute();
+    const { id, name, correo } = route.params;
+    //const { id } = useLocalSearchParams();
 
-    const { id } = useLocalSearchParams();
-
-    //const { correo } = useLocalSearchParams();
-    
-    console.log("Proyecto edit "+id)
     
     const [valores, setValores] = useState<Proyecto>({
         descripcion: '',
@@ -29,9 +28,9 @@ const NuevoProyecto: React.FC = () => {
         categoriaP: '',
         mediaItems: [""],
     });
-
-    const [open, setOpen] = useState(false);  // Estado para controlar el dropdown
-    const [categoria, setCategoria] = useState('');  // Estado para la categoría seleccionada
+    const [loading, setLoading] = React.useState(true);
+    const [open, setOpen] = useState(false); 
+    const [categoria, setCategoria] = useState('');  
     const [categorias, setCategorias] = useState([
         { label: 'Tecnología', value: 'tecnologia' },
         { label: 'Salud', value: 'salud' },
@@ -41,7 +40,9 @@ const NuevoProyecto: React.FC = () => {
         { label: 'Otro', value: 'otro' }
     ]);
 
-    const handleForm = () => {
+    
+
+    const handleForm = async () => {
         const nuevoProyecto: Proyecto = {
             ...valores,
             categoriaP: categoria,
@@ -49,7 +50,14 @@ const NuevoProyecto: React.FC = () => {
 
         console.log('Datos del proyecto a enviar:', nuevoProyecto);
         try {
-            const proyectoCreado = 1
+            const response = await fetch('http://10.0.2.2:9000/api/proyectos/' + id + '/' + correo + '/' + name, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(nuevoProyecto),
+            });
+            alert('Proyecto modificado con exito!');
 
 
 

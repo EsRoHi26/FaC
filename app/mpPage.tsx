@@ -1,7 +1,7 @@
 import { Button, Card } from '@rneui/base';
 import { useLocalSearchParams } from 'expo-router';
 import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import React from 'react';
 
 interface Proyectos {
@@ -17,19 +17,21 @@ interface Proyectos {
 }
 
 export default function ProyectPage() {
-
-    const { id, name } = useLocalSearchParams();
+    const navigation = useNavigation();
+    const { id, name, correo } = useLocalSearchParams();
+    
 
     const [amount, setAmount] = React.useState(1000);
     const [goal, setGoal] = React.useState(5000);
     const [project, setProject] = React.useState<Proyectos | null>(null);  // Cambiado a un solo objeto
     const [loading, setLoading] = React.useState(true);
 
-    console.log("id Proyecto mio"+id)
+    
+
     const navigateToProyecto = () => {
-        navigation.navigate('editarProyecto', { id: project._id });
+        navigation.navigate('editarProyecto', { id: project._id, name: project.pName, correo: correo });
         
-    };
+    }; 
 
     const getProjects = async () => {
         try {
