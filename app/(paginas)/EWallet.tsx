@@ -41,6 +41,15 @@ function TestPage() {
         }, [correoResp])
     );
 
+    const handleMontoChange = (text: string) => {
+        if (/^\d*$/.test(text)) {
+            setMonto(text);
+        }
+        else{
+            alert("Solo se permiten números");
+        }
+    };
+
     const add = () => {
         const newMontoTxt = (parseInt(monto) + parseInt(montoTxt)).toString();
 
@@ -75,7 +84,7 @@ function TestPage() {
                     inputMode='numeric'
                     placeholder="Añade un monto"
                     value={monto}
-                    onChangeText={setMonto}
+                    onChangeText={handleMontoChange}
                 ></TextInput>
             </View>
             <View style={{ width: 200, alignContent: 'center', marginHorizontal: 110, marginTop: 20 }}>

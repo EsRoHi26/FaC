@@ -45,15 +45,16 @@ export default function ProyectPage() {
     
     const getProjects = async () => {
         try {
-            const response = await fetch('http://10.0.2.2:9000/api/proyectos/' + id, {
+            const response = await fetch('http://10.0.2.2:9000/api/proyectos/', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
             const data = await response.json();
+            const filteredProject = data.find((proyecto: Proyecto) => proyecto.correoResponsable !== correo);
             
-            setProject(data);  
+            setProject(filteredProject || null);
         } catch (e) {
             console.log(e);
         } finally {
