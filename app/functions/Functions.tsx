@@ -45,7 +45,7 @@ export async function Crear(valores: any) {
     //const valoresJSON = JSON.stringify(valores);
     //console.log(valoresJSON);
 
-    fetch("http://10.0.2.2:9000/api/proyectos", {
+    fetch("https://fac-95ei.onrender.com/api/proyectos", {
         method: 'POST',
         body: JSON.stringify(valores),
         headers: {
@@ -57,7 +57,7 @@ export async function Crear(valores: any) {
         .then(data => {
             console.log(data)
             console.log(data.correoResponsable)
-            fetch("http://10.0.2.2:9000/api/usuariosP/" + data.correoResponsable, {
+            fetch("https://fac-95ei.onrender.com/api/usuariosP/" + data.correoResponsable, {
                 method: 'PUT',
                 body: JSON.stringify({
                     proyectoId: data._id.toString()

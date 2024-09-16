@@ -15,7 +15,7 @@ function TestPage() {
     // let montoTxt = "1000"
 
     const getMoney = async (mail: string) => {
-        const responseUsuario = await fetch('http://10.0.2.2:9000/api/usuarios/correo/' + mail, {
+        const responseUsuario = await fetch('https://fac-95ei.onrender.com/api/usuarios/correo/' + mail, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ function TestPage() {
     const add = () => {
         const newMontoTxt = (parseInt(monto) + parseInt(montoTxt)).toString();
 
-        fetch('http://10.0.2.2:9000/api/usuarios/dinero/' + correoResp, {
+        fetch('https://fac-95ei.onrender.com/api/usuarios/dinero/' + correoResp, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

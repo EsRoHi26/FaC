@@ -45,7 +45,7 @@ export default function ProyectPage() {
     
     const getProjects = async () => {
         try {
-            const response = await fetch('http://10.0.2.2:9000/api/proyectos/'+id, {
+            const response = await fetch('https://fac-95ei.onrender.com/api/proyectos/'+id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
