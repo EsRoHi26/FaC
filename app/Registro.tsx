@@ -83,7 +83,7 @@ const Registro: React.FC = () => {
             return;
         }
 
-        fetch('http://10.0.2.2:9000/api/usuarios/', {
+        fetch('https://fac-95ei.onrender.com/api/usuarios/', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

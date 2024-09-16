@@ -33,7 +33,7 @@ export default function HomeScreen() {
   const getProjects = async () => {
     setOtherProjects([]);
     try {
-      const response = await fetch('http://10.0.2.2:9000/api/proyectos', {
+      const response = await fetch('https://fac-95ei.onrender.com/api/proyectos', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

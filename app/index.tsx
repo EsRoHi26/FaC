@@ -11,7 +11,7 @@ const LoginScreen = (param: string) => {
     const navigation = useNavigation();
 
     const handleLogin = async () => {
-        const resp = await fetch('http://10.0.2.2:9000/api/autenticacion', {
+        const resp = await fetch('https://fac-95ei.onrender.com/api/autenticacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
