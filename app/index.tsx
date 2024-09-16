@@ -4,43 +4,59 @@ import { View, TextInput, StyleSheet, Text } from 'react-native';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = ( param: string) => {
+const LoginScreen = (param: string) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const navigation = useNavigation();
 
-    const handleLogin = () => {
-        // Implement your login logic here
-        fetch('http://10.0.2.2:9000/api/autenticacion', {
+    const handleLogin = async () => {
+        const resp = await fetch('http://10.0.2.2:9000/api/autenticacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({"email": email, "contrasenna": password}),
-    }).then((response) => {
-        if (response.status === 200) {
-            navigateToHome();
-            return response.json();
+            body: JSON.stringify({ "email": email, "contrasenna": password }),
+        });
+        const data = await resp.json();
+        console.log(data);
+        if (data.mensaje === 'usuario' || data.mensaje === 'Administrador') {
+            navigateToHome(data.mensaje);
         } else {
-            throw new Error('Usuario no encontrado');
-            alert('Usuario no encontrado');
-        }
-    })
-
-        console.log('Logging in...');
+            alert(data.mensaje);
+            /*.then((response) => {
+                if (response.status === 200) {
+                    navigateToHome();
+                    return response.json();
+                } else {
+                    console.log(response);
+                    let msg = resp.json();
+                    alert('Usuario no encontrado');
+                    throw new Error('Usuario no encontrado');
+                }
+            })
         
+                console.log('Logging in...');
+              */
+        }
     };
 
     const navigateToRegistro = () => {
         navigation.navigate('Registro');
-        
+
     };
 
-    const navigateToHome = () => {
-        navigation.setParams({correo: email});
-        param = email;
-        navigation.navigate('(paginas)');
+    const navigateToHome = (rol: string) => {
+        if (rol === 'usuario') {
+            navigation.setParams({ correo: email });
+            param = email;
+            navigation.navigate('(paginas)');
+        }
+        else {
+            navigation.setParams({ correo: email });
+            param = email;
+            navigation.navigate('(paginasAdmin)');
+        }
     }
 
     return (
@@ -60,10 +76,10 @@ const LoginScreen = ( param: string) => {
                     value={password}
                     onChangeText={setPassword}
                 />
-                <Button title= "solid" color='#A1E79F' onPress={handleLogin}>Login</Button>
+                <Button title="solid" color='#A1E79F' onPress={handleLogin}>Login</Button>
                 <Text style={styles.title2}>Sign up</Text>
-                <Button title= "Registro" color='#A1E79F'  onPress={navigateToRegistro}/>
-                
+                <Button title="Registro" color='#A1E79F' onPress={navigateToRegistro} />
+
             </View>
         </View>
     );

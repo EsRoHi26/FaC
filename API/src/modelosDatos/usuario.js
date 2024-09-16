@@ -42,6 +42,10 @@ const esquemaUsuario = mongoose.Schema({
     donaciones: {
         type: [String],
         required: false
+    },
+    estado: {
+        type: String,
+        required: true
     }
 });
 
