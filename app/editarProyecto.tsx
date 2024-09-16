@@ -43,6 +43,11 @@ const NuevoProyecto: React.FC = () => {
     
 
     const handleForm = async () => {
+
+        if (!valores.objetivoF || !valores.descripcion || !categoria) {
+            alert('Todos los campos deben ser completados.');
+            return;
+        }
         const nuevoProyecto: Proyecto = {
             ...valores,
             categoriaP: categoria,
@@ -66,14 +71,79 @@ const NuevoProyecto: React.FC = () => {
         }
     };
 
-    const handleInputChange = (
-        value: string | number,
-        campo: keyof Proyecto,
-    ) => {
+    const handleInputChange = ( value: string | number, campo: keyof Proyecto, ) => {
+
+
+
+        if (campo === 'objetivoF'  ) {
+            const numero = parseInt(value, 10); 
+            if (!isNaN(numero)) {
+                setValores(prevValores => ({
+                    ...prevValores,
+                    [campo]: value,
+                }));
+            }
+            else {
+                alert('Solo puedes ingresar números.');
+                setValores(prevValores => ({
+                    ...prevValores,
+                    [campo]: '',
+                }));
+                //console.warn(`Valor inválido para ${campo}: ${value}`);
+            }
+        }
         setValores(prevValores => ({
             ...prevValores,
             [campo]: value,
         }));
+    };
+
+    const handleFechaBlur = () => {
+        const regexFecha = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+        const fechaIngresada = valores.fechaLimite;
+        
+        if (!regexFecha.test(fechaIngresada)) {
+            alert('La fecha debe estar en el formato dd/mm/yyyy.');
+            setValores(prevValores => ({
+                ...prevValores,
+                fechaLimite: '',
+            }));
+            return;
+        }
+
+        const [dia, mes, anio] = fechaIngresada.split('/').map(Number);
+        const fechaActual = new Date();
+        const fechaUsuario = new Date(anio, mes - 1, dia); 
+
+        if (mes < 1 || mes > 12 || dia < 1 || dia > 31) {
+            alert('El día o mes no son válidos.');
+            setValores(prevValores => ({
+                ...prevValores,
+                fechaLimite: '',
+            }));
+            return;
+        }
+
+        // Validar días máximos en meses
+        const diasEnMes = [31, (anio % 4 === 0 && anio % 100 !== 0) || anio % 400 === 0 ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        if (dia > diasEnMes[mes - 1]) {
+            alert('El día no es válido para el mes ingresado.');
+            setValores(prevValores => ({
+                ...prevValores,
+                fechaLimite: '',
+            }));
+            return;
+        }
+
+        // Validar que la fecha ingresada sea mayor o igual a la fecha actual
+        if (fechaUsuario < fechaActual) {
+            alert('La fecha límite debe ser mayor o igual que la fecha actual.');
+            setValores(prevValores => ({
+                ...prevValores,
+                fechaLimite: '',
+            }));
+            return;
+        }
     };
 
 
@@ -85,9 +155,11 @@ const NuevoProyecto: React.FC = () => {
 
                     <TextInput
                         style={styles.input}
-                        placeholder="Objetivo de recaudación"
+                        placeholder="Objetivo de recaudación (dd/mm/yyyy)"
                         onChangeText={text => handleInputChange(text, 'objetivoF')}
                         value={valores.objetivoF}
+                        maxLength={10}
+                        onBlur={handleFechaBlur} 
                     />
 
 

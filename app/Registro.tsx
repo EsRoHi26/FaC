@@ -48,6 +48,11 @@ const Registro: React.FC = () => {
                     [campo]: value,
                 }));
             } else {
+                alert('Solo puedes ingresar números.');
+                setJob((prevJob) => ({
+                    ...prevJob,
+                    [campo]: '',
+                }));
                 console.warn(`Valor inválido para ${campo}: ${value}`);
             }
         } 
