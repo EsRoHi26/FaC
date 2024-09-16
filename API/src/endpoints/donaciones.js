@@ -3,8 +3,8 @@ const esquemaDonacion = require('../modelosDatos/donacion');
 const Usuario = require('../modelosDatos/Usuario');
 const Proyecto = require('../modelosDatos/proyecto');
 const router = express.Router();
-//const sgMail = require('@sendgrid/mail');
-//sgMail.setApiKey("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");
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey("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");
 
 
 // Trae todos los Donaciones
@@ -29,9 +29,6 @@ router.post('/donaciones/:responsable', (req, res) => {
     const donante = donacion.correoDonante;
     const proy = donacion.nombreProyecto;
     const responsable = req.params.responsable;
-    console.log(responsable)
-    console.log(proy)
-    console.log(donante)
 
     donacion.save()
     .then( async(donaciones) => {

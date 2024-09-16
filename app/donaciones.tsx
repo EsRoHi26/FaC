@@ -6,7 +6,7 @@ import RadioGroup from 'react-native-radio-buttons-group';
 import { Float } from 'react-native/Libraries/Types/CodegenTypes';
 import { Usuario } from '../app/interfaces/usuarios.interface';
 
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect  } from '@react-navigation/native';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -112,7 +112,6 @@ const NuevoProyecto: React.FC = () => {
             });
 
             const usuarioActualizado = await response.json();
-            console.log('Usuario actualizado:', usuarioActualizado);
 
             //actualizar el monto de donacion en el proyecto
             
@@ -137,22 +136,45 @@ const NuevoProyecto: React.FC = () => {
     };
 
 
-    const handleInputChange = (
-        value: string | number,
-        campo: keyof Donaciones,
-    ) => {
+    const handleInputChange = ( value: string | number, campo: keyof Donaciones,) => {
+        if (campo === 'monto' || campo === 'telefonoDonante' ) {
+            const numero = parseInt(value, 10); 
+            if (!isNaN(numero)) {
+                setValores(prevValores => ({
+                    ...prevValores,
+                    [campo]: value,
+                }));
+            } else {
+                alert('Solo puedes ingresar números.');
+                setValores(prevValores => ({
+                    ...prevValores,
+                    [campo]: '',
+                }));
+                //console.warn(`Valor inválido para ${campo}: ${value}`);
+            }
+        } 
+        else {
         setValores(prevValores => ({
             ...prevValores,
             [campo]: value,
-        }));
+        }))};
     };
 
+    useFocusEffect(
+        React.useCallback(() => {
+            // Aquí puedes ejecutar cualquier función que quieras que se ejecute cuando la pantalla se enfoque
+            setValores(prev => ({
+                ...prev,
+                correoDonante: correo, // Puedes actualizar cualquier otro valor
+            }));
+        }, [correo])
+    );
 
     return (
         <ScrollView>
             <View style={styles.container}>
                 <View style={styles.container2}>
-                    <Text style={styles.title}>Nuevo Proyecto</Text>
+                    <Text style={styles.title}>Nueva Donación</Text>
 
                     <TextInput
                         style={styles.input}
@@ -163,6 +185,7 @@ const NuevoProyecto: React.FC = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="Teléfono"
+                        inputMode='numeric'
                         onChangeText={text => handleInputChange(text, 'telefonoDonante')}
                         value={valores.telefonoDonante}
                     />

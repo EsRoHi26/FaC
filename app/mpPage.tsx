@@ -1,8 +1,8 @@
 import { Button, Card } from '@rneui/base';
 import { useLocalSearchParams } from 'expo-router';
 import { View, Text, ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import React from 'react';
+import { useNavigation, useRoute,  useFocusEffect } from '@react-navigation/native';
+import React, { useCallback } from 'react';
 
 interface Proyectos {
     correoResponsable: string;
@@ -51,9 +51,14 @@ export default function ProyectPage() {
         }
     };
 
-    React.useEffect(() => {
-        getProjects();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            setLoading(true);
+            getProjects();
+        }, [id])
+    );
+
+    
 
     if (loading) {
         return (
@@ -96,10 +101,15 @@ export default function ProyectPage() {
                         </View>
                     </View>
                     <View style={styles.card}>
-                        <Text style={styles.title}>Descripción</Text>
-                        <Text style={{ fontSize: 22 }}>
-                            {project.descripcion}
-                        </Text>
+                            <Text style={styles.title}>Descripción</Text>
+                            <Text style={{ fontSize: 22 }}>
+                                {project.descripcion}
+                            </Text>
+                            <Text style={styles.title}> Fecha límite </Text>
+                            <Text style={{ fontSize: 22 }}>
+                                {project.fechaLimite}
+                            </Text>
+
                     </View>
                     <View>
                     <Button title= "Editar" color='#8cc583' onPress={navigateToProyecto} />
