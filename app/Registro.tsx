@@ -18,7 +18,8 @@ interface Job {
     rol: string;
     contrasenna: string;
     proyectoPropios: string[]; 
-    donaciones: string[];    
+    donaciones: string[];
+    estado: string;    
 }
 
 const Registro: React.FC = () => {
@@ -35,7 +36,8 @@ const Registro: React.FC = () => {
             rol: '',
             contrasenna: '',
             proyectoPropios: [''], 
-            donaciones: [''],    
+            donaciones: [''],
+            estado: 'Activo'    
         }
     );
     
@@ -94,14 +96,15 @@ const Registro: React.FC = () => {
             return response;
         })
         .then(() => {
-            alert('Usuario creado con éxito');   
+            alert('Usuario creado con éxito'); 
+            navigation.navigate('index');  
         })
             .catch((error) => {
                 console.error('Error en la creación del usuario:', error);
                 alert('Hubo un error al crear el usuario: ' + error.message);  
             });
 
-        //navigation.navigate('index');
+        
     };
 
 

@@ -155,12 +155,15 @@ router.post('/autenticacion', (req, res) => {
 
     esquemaUsuario.findOne({ email }).then(usuario => {
         if (!usuario) {
-            return res.status(500).send('El usuario no se ha encontrado');
+            return res.status(500).json({ mensaje: 'Usuario no encontrado' });
         }
         if (usuario.contrasenna === contrasenna) {
-            return res.status(200).send('Usuario autenticado');
+            if (usuario.estado === 'Inactivo') {
+                return res.status(500).json({ mensaje: 'Usuario desactivado'});
+            }
+            return res.status(200).json({mensaje: usuario.rol});
         } else {
-            return res.status(500).send('Contraseña incorrecta');
+            return res.status(500).json({ mensaje: 'Credeniales incorrectas' });
         }
     })
 
