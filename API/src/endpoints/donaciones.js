@@ -34,7 +34,7 @@ router.post('/donaciones/:responsable', (req, res) => {
     .then( async(donaciones) => {
 
         
-        res.json(donaciones)/*
+        res.json(donaciones)
         const msg = {
         to: donante,
         from: 'gomezacunav@gmail.com',
@@ -105,7 +105,7 @@ router.post('/donaciones/:responsable', (req, res) => {
         }
         catch(error){
             console.log(error);
-        }*/
+        }
     })
     
     
