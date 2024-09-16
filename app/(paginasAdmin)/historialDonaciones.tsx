@@ -6,6 +6,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 
 interface Donaciones {
+    _id: string;
     monto: string;
     correoDonante: string;
     nombreDonante: string;
@@ -32,7 +33,7 @@ export default function ProyectScreen() {
     const getProjects = async () => {
         setOtherProjects([]);
         try {
-            const response = await fetch('http://10.0.2.2:9000/api/donaciones/'+s, {
+            const response = await fetch('http://10.0.2.2:9000/api/donaciones/', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,6 +81,8 @@ export default function ProyectScreen() {
                                     <Card key={i}>
                                         <Card.Title>Donación</Card.Title>
                                         <Text>Proyecto: {project.nombreProyecto}</Text>
+                                        <Card.Divider />
+                                        <Text>Donante: {project.nombreDonante}</Text>
                                         <Card.Divider />
                                         <Text>Monto donado: {project.monto}</Text>
                                         <Card.Divider />

@@ -8,7 +8,7 @@ import { Usuario } from '../interfaces/usuarios.interface';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import { Crear } from '../functions/Functions';
 import { useNavigation } from '@react-navigation/native';
-import DropDownPicker from 'react-native-dropdown-picker'; 
+import DropDownPicker from 'react-native-dropdown-picker';
 interface Proyecto {
     correoResponsable: string;
     pName: string;
@@ -26,11 +26,11 @@ const NuevoProyecto: React.FC = () => {
     //const { correo } = useLocalSearchParams();
     const navigation = useNavigation();
     const correos = navigation.getParent()?.getState().routes[0].params;
-    
-    const correoResp = (correos as { correo: string }).correo;
-    
 
-    
+    const correoResp = (correos as { correo: string }).correo;
+
+
+
     const [valores, setValores] = useState<Proyecto>({
         correoResponsable: correoResp,
         pName: '',
@@ -43,8 +43,8 @@ const NuevoProyecto: React.FC = () => {
         donaciones: [],
     });
 
-    const [open, setOpen] = useState(false);  
-    const [categoria, setCategoria] = useState('');  
+    const [open, setOpen] = useState(false);
+    const [categoria, setCategoria] = useState('');
     const [categorias, setCategorias] = useState([
         { label: 'Tecnología', value: 'tecnologia' },
         { label: 'Salud', value: 'salud' },
@@ -67,7 +67,7 @@ const NuevoProyecto: React.FC = () => {
         console.log('Datos del proyecto a enviar:', nuevoProyecto);
         try {
             const proyectoCreado = Crear(nuevoProyecto);
-            navigation.getParent()?.setParams({ carga: true});
+            navigation.getParent()?.setParams({ carga: true });
 
 
 
@@ -76,9 +76,9 @@ const NuevoProyecto: React.FC = () => {
         }
     };
 
-    const handleInputChange = ( value: string | number, campo: keyof Proyecto, ) => {
-        if (campo === 'objetivoF'  ) {
-            const numero = parseInt(value, 10); 
+    const handleInputChange = (value: string | number, campo: keyof Proyecto,) => {
+        if (campo === 'objetivoF') {
+            const numero = parseInt(value, 10);
             if (!isNaN(numero)) {
                 setValores(prevValores => ({
                     ...prevValores,
@@ -98,13 +98,14 @@ const NuevoProyecto: React.FC = () => {
             setValores(prevValores => ({
                 ...prevValores,
                 [campo]: value,
-            }))};
+            }))
+        };
     }
 
     const handleFechaBlur = () => {
         const regexFecha = /^(\d{2})\/(\d{2})\/(\d{4})$/;
         const fechaIngresada = valores.fechaLimite;
-        
+
         if (!regexFecha.test(fechaIngresada)) {
             alert('La fecha debe estar en el formato dd/mm/yyyy.');
             setValores(prevValores => ({
@@ -116,7 +117,7 @@ const NuevoProyecto: React.FC = () => {
 
         const [dia, mes, anio] = fechaIngresada.split('/').map(Number);
         const fechaActual = new Date();
-        const fechaUsuario = new Date(anio, mes - 1, dia); 
+        const fechaUsuario = new Date(anio, mes - 1, dia);
 
         if (mes < 1 || mes > 12 || dia < 1 || dia > 31) {
             alert('El día o mes no son válidos.');
@@ -175,7 +176,7 @@ const NuevoProyecto: React.FC = () => {
                         onChangeText={text => handleInputChange(text, 'fechaLimite')}
                         value={valores.fechaLimite}
                         maxLength={10}
-                        onBlur={handleFechaBlur} 
+                        onBlur={handleFechaBlur}
                     />
 
 
@@ -201,17 +202,17 @@ const NuevoProyecto: React.FC = () => {
                         placeholder="Seleccionar categoría"
                         style={styles.dropdown}
                         dropDownContainerStyle={styles.dropdownContainer}
-                        maxHeight={150}  
+                        maxHeight={150}
                         scrollViewProps={{
-                            nestedScrollEnabled: true, 
+                            nestedScrollEnabled: true,
                         }}
                     />
 
-                    <Button title="Crear" onPress={handleForm}  />
+                    <Button title="Crear" onPress={handleForm} />
                 </View>
             </View>
         </ScrollView>
-        
+
     );
 }
 const styles = StyleSheet.create({

@@ -5,17 +5,19 @@ import { Link } from 'expo-router';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 
-interface Proyectos {
+interface Usuario {
     _id: string;
-    correoResponsable: string;
-    pName: string;
-    descripcion: string;
-    objetivoF: string;
-    montoReca: string;
-    fechaLimite: string;
-    categoriaP: string;
-    mediaItems: string[];
+    cedula: string;
+    name: string;
+    email: string;
+    areaTrabajo: string;
+    dineroInicial: number,
+    telefono: string;
+    rol: string;
+    contrasenna: string;
+    proyectoPropios: string[];
     donaciones: string[];
+    estado: string;
 }
 
 export default function ProyectScreen() {
@@ -26,25 +28,78 @@ export default function ProyectScreen() {
 
     const s: string = correoResp;
 
-    const [projects, setProjects] = React.useState<Proyectos[]>([]);
+    const [projects, setProjects] = React.useState<Usuario[]>([]);
     const [loading, setLoading] = React.useState(true);
-    const [otherProjects, setOtherProjects] = React.useState<Proyectos[]>([]);
+    const [otherProjects, setOtherProjects] = React.useState<Usuario[]>([]);
 
     const getProjects = async () => {
-        setOtherProjects([]);
+        setProjects([]);
         try {
-            const response = await fetch('http://10.0.2.2:9000/api/proyectos', {
+            const response = await fetch('http://10.0.2.2:9000/api/usuarios', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 }
             });
             const projectDetails = await response.json();
-            setProjects(projectDetails);
-            const filteredProjects = projectDetails.filter(
-                (project: Proyectos) => project.correoResponsable === correoResp
-            );
-            setOtherProjects(filteredProjects);
+            projectDetails.forEach((project: Usuario) => {
+                if (project.email !== correoResp) {
+                    setProjects((oldProjects) => [...oldProjects, project]);
+                }
+            });
+            //setProjects(projectDetails);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const activar = async () => {
+        try {
+            fetch('http://10.0.2.2:9000/api/usuarios/act/' + s, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const desactivar = async () => {
+        try {
+            fetch('http://10.0.2.2:9000/api/usuarios/des/' + s, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    const borrar = async (user : Usuario) => {
+        for (let i = 0; i < user.proyectoPropios.length; i++) {
+            try {
+                fetch('http://10.0.2.2:9000/api/proyectos/' + user.proyectoPropios[i], {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
+        try {
+            fetch('http://10.0.2.2:9000/api/usuarios/' + user._id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
         } catch (e) {
             console.log(e);
         }
@@ -65,37 +120,24 @@ export default function ProyectScreen() {
         );
     } else {
         return (
-            <View>
-                <View style={{ height: 700 }}>
-                    <ScrollView>
-                        {otherProjects.map((project, i) => (
-                            <Link
-                                href={{
-                                    pathname: '/mpPage',
-                                    params: { id: project._id, name: project.pName, correo: s }
-                                }}
-                                key={i}
-                                asChild
-                            >
-                                <Pressable>
-                                    <Card key={i}>
-                                        <Card.Title>{project.pName}</Card.Title>
-                                        <Card.Divider />
-                                        <Card.Image source={{ uri: 'https://picsum.photos/200/300' }} />
-                                        <Text>{project.descripcion}</Text>
-                                    </Card>
-                                </Pressable>
-                            </Link>
-                        ))}
-                    </ScrollView>
-                </View>
-                <View style={{ width: 200, alignContent: 'center', marginHorizontal: 140, marginTop: 20 }}>
-                    <Link href={{ pathname: '/NuevoProyecto' }}>
-                        <View style={styles.bttn}>
-                            <Text style={{ textAlign: 'center', color: 'white' }}>Nuevo Proyecto</Text>
-                        </View>
-                    </Link>
-                </View>
+            <View style={{ height: 700 }}>
+                <ScrollView>
+                    {projects.map((project, i) => (
+                        <Card key={i}>
+                            <Card.Title>{project.name}</Card.Title>
+                            <Card.Divider />
+                            <Card.Image source={{ uri: 'https://picsum.photos/200/300' }} />
+                            <Text>{project.estado}</Text>
+                            <Text>{project._id}</Text>
+                            <Card.Divider />
+                            {project.estado === 'Activo' ? <Button onPress={desactivar}>Desactivar</Button> : <Button onPress={activar}>Activar</Button>}
+                            <Card.Divider />
+                            <Pressable onPress={() => borrar(project)}>
+                                <Text style={styles.bttn}>Borrar</Text>
+                            </Pressable>
+                        </Card>
+                    ))}
+                </ScrollView>
             </View>
         );
     }
@@ -103,9 +145,12 @@ export default function ProyectScreen() {
 
 const styles = StyleSheet.create({
     bttn: {
-        backgroundColor: 'blue',
+        backgroundColor: 'red',
         borderRadius: 20,
         alignItems: 'center',
         padding: 20,
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 20,
     },
 });
