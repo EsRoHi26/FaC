@@ -1,6 +1,6 @@
 const express = require('express');
 const esquemaDonacion = require('../modelosDatos/donacion');
-const Usuario = require('../modelosDatos/Usuario');
+const Usuario = require('../modelosDatos/usuario');
 const Proyecto = require('../modelosDatos/proyecto');
 const router = express.Router();
 const sgMail = require('@sendgrid/mail');

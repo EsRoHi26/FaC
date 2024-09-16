@@ -98,6 +98,20 @@ const NuevoProyecto: React.FC = () => {
         }));
     };
 
+    const handleObjetivoFBlur = () => {
+        const regexObjetivoF = /^[0-9]*$/;
+        const objetivoFIngresado = valores.objetivoF;
+        
+        if (!regexObjetivoF.test(objetivoFIngresado)) {
+            alert('El objetivo de recaudación debe ser un número entero.');
+            setValores(prevValores => ({
+                ...prevValores,
+                objetivoF: '',
+            }));
+            return;
+        }
+    }
+/*
     const handleFechaBlur = () => {
         const regexFecha = /^(\d{2})\/(\d{2})\/(\d{4})$/;
         const fechaIngresada = valores.fechaLimite;
@@ -145,7 +159,7 @@ const NuevoProyecto: React.FC = () => {
             return;
         }
     };
-
+*/
 
     return (
         <ScrollView>
@@ -155,11 +169,11 @@ const NuevoProyecto: React.FC = () => {
 
                     <TextInput
                         style={styles.input}
-                        placeholder="Objetivo de recaudación (dd/mm/yyyy)"
+                        placeholder="Objetivo de recaudación"
                         onChangeText={text => handleInputChange(text, 'objetivoF')}
                         value={valores.objetivoF}
                         maxLength={10}
-                        onBlur={handleFechaBlur} 
+                        onBlur={handleObjetivoFBlur} 
                     />
 
 

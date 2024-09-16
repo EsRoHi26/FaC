@@ -35,8 +35,8 @@ const Registro: React.FC = () => {
             telefono: '',
             rol: '',
             contrasenna: '',
-            proyectoPropios: [''], 
-            donaciones: [''],
+            proyectoPropios: [], 
+            donaciones: [],
             estado: 'Activo'    
         }
     );

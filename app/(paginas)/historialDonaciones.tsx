@@ -6,6 +6,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 
 interface Donaciones {
+    _id: string;
     monto: string;
     correoDonante: string;
     nombreDonante: string;

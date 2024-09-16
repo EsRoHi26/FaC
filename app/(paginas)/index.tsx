@@ -31,6 +31,7 @@ export default function HomeScreen() {
   const s: string = correoResp;
 
   const getProjects = async () => {
+    setOtherProjects([]);
     try {
       const response = await fetch('http://10.0.2.2:9000/api/proyectos', {
         method: 'GET',

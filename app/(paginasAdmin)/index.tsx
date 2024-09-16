@@ -70,7 +70,7 @@ export default function HomeScreen() {
         <ScrollView>
           {!loading && projects.map((project, i) => (
             <Link href={{
-              pathname: "/pPage",
+              pathname: "/mpPage",
               params: { id: project._id, name: project.pName, correo: s }
             }} key={i} asChild>
               <Pressable>
