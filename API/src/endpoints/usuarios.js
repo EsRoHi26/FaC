@@ -80,7 +80,7 @@ router.post('/usuarios/', async (req, res) => {
 
         
         res.json(usuarios)
-        /*const msg = {
+        const msg = {
         to: usuario.email,
         from: 'gomezacunav@gmail.com',
         subject: '¡Bienvenido a Fund a Cause!',
@@ -119,7 +119,7 @@ router.post('/usuarios/', async (req, res) => {
         }
         catch(error){
             console.log(error);
-        }*/
+        }
     })
     
     

@@ -65,7 +65,7 @@ router.put('/proyectos/:id/:correo/:name', async (req, res) => {
         .then(() => { res.json({ mensaje: 'Proyecto actualizado' }) })
         .catch((err) => res.json(err));
 
-    /*const msg = {
+    const msg = {
         to: correo,
         from: 'gomezacunav@gmail.com',
         subject: '¡Su Proyecto en Fund a Cause ha sido Actualizado!',
@@ -104,7 +104,7 @@ router.put('/proyectos/:id/:correo/:name', async (req, res) => {
         }
         catch(error){
             console.log(error);
-        }*/
+        }
 });
 
 //eliminar un proyecto
