@@ -40,14 +40,14 @@ export default function HomeScreen() {
       }).then(async (response) => {
         const projectDetails = await response.json();
         setProjects(projectDetails);
-        await projectDetails.forEach((project:Proyectos) => {
+         /* await projectDetails.forEach((project:Proyectos) => {
           
           if (project.correoResponsable !== correoResp) {
             setOtherProjects((oldProjects) => [...oldProjects, project]);
           }
           setLoading(false);
-        }
-        )});
+        })*/
+      });
     } catch (e) {
       console.log(e);
     }
@@ -68,7 +68,7 @@ export default function HomeScreen() {
     <View>
       <View style={{ height: 700 }}>
         <ScrollView>
-          {!loading && otherProjects.map((project, i) => (
+          {!loading && projects.map((project, i) => (
             <Link href={{
               pathname: "/pPage",
               params: { id: project._id, name: project.pName, correo: s }

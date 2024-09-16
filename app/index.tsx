@@ -20,7 +20,7 @@ const LoginScreen = (param: string) => {
         });
         const data = await resp.json();
         console.log(data);
-        if (data.mensaje === 'usuario' || data.mensaje === 'Administrador') {
+        if (data.mensaje === 'usuario' || data.mensaje === 'admistrador') {
             navigateToHome(data.mensaje);
         } else {
             alert(data.mensaje);
