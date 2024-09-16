@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'expo-router';
-import { View, TextInput, StyleSheet, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Text, Image } from 'react-native';
 import { Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 
@@ -61,6 +61,12 @@ const LoginScreen = (param: string) => {
 
     return (
         <View style={styles.container}>
+            <View style={{ paddingTop: 100 }}>
+                <Image
+                    source={require('../assets/images/Logo.png')}
+                    style={{ width: 150, height: 150 }}
+                />
+            </View>
             <View style={styles.container2}>
                 <Text style={styles.title}>Login</Text>
                 <TextInput
@@ -97,7 +103,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#D1FDD6',
         padding: 20,
         flex: 1,
-        marginTop: 180,
+        marginTop: 80,
         marginBottom: 200,
         width: 350,
         alignSelf: 'center',
