@@ -1,5 +1,5 @@
 const express = require('express');
-const esquemaUsuario = require('../modelosDatos/Usuario');
+const esquemaUsuario = require('../modelosDatos/usuario');
 const router = express.Router();
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey("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");
@@ -34,6 +34,26 @@ router.put('/usuarios/dinero/:correo', (req, res) => {
 
     esquemaUsuario.updateOne(filter, { $set: { dineroInicial: plata } })
         .then(() => res.status(200).json({ mensaje: 'Dinero inicial actualizado' }))
+        .catch((error) => res.json(error));
+});
+
+router.put('/usuarios/des/:correo', (req, res) => {
+    const { correo } = req.params;
+    const estado = 'Inactivo';
+    const filter = { email: correo };
+
+    esquemaUsuario.updateOne(filter, { $set: { estado: estado } })
+        .then(() => res.status(200).json({ mensaje: 'Estado actualizado' }))
+        .catch((error) => res.json(error));
+});
+
+router.put('/usuarios/act/:correo', (req, res) => {
+    const { correo } = req.params;
+    const estado = 'Activo';
+    const filter = { email: correo };
+
+    esquemaUsuario.updateOne(filter, { $set: { estado: estado } })
+        .then(() => res.status(200).json({ mensaje: 'Estado actualizado' }))
         .catch((error) => res.json(error));
 });
 

@@ -5,9 +5,11 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
 import { DrawerStatusContext } from '@react-navigation/drawer';
+import { Button } from '@rneui/base';
+import { useNavigation } from '@react-navigation/native';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme() ?? 'light';
+  const navigation = useNavigation();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -49,7 +51,7 @@ export default function TabLayout() {
         />
       
       </Drawer>
-      
+      <Button onPress={()=> navigation.navigate('index')}>Salir</Button>
     </GestureHandlerRootView>
   );
 }

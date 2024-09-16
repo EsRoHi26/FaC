@@ -1,6 +1,6 @@
 const express = require('express');
 const esquemaProyecto = require('../modelosDatos/proyecto');
-const Usuario = require('../modelosDatos/Usuario');
+const Usuario = require('../modelosDatos/usuario');
 const { ExplainVerbosity } = require('mongodb');
 const moment = require('moment');
 const router = express.Router();
@@ -111,7 +111,7 @@ router.put('/proyectos/:id/:correo/:name', async (req, res) => {
 router.delete('/proyectos/:id', (req, res) => {
     const { id } = req.params;
 
-    esquemaProyecto.remove({ _id: id })
+    esquemaProyecto.findByIdAndDelete({ _id: id })
         .then(() => { res.json({ mensaje: 'Proyecto eliminado' }) })
         .catch((err) => res.json(err));
 });

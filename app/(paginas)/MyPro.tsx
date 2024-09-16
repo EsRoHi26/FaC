@@ -66,7 +66,7 @@ export default function ProyectScreen() {
     } else {
         return (
             <View>
-                <View style={{ height: 700 }}>
+                <View style={{ height: 600 }}>
                     <ScrollView>
                         {otherProjects.map((project, i) => (
                             <Link

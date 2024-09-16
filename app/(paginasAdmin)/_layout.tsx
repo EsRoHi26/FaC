@@ -5,20 +5,15 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
 import { DrawerStatusContext } from '@react-navigation/drawer';
+import { Button } from '@rneui/base';
+import { useNavigation } from '@react-navigation/native';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme() ?? 'light';
+  const navigation = useNavigation();
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer>
-        <Drawer.Screen
-          name="EWallet" // This is the name of the page and must match the url from root
-          options={{
-            drawerLabel: 'E-Wallet',
-            title: 'E-Wallet',
-          }}
-        />
         <Drawer.Screen
           name="index" // This is the name of the page and must match the url from root
           options={{
@@ -29,15 +24,8 @@ export default function TabLayout() {
         <Drawer.Screen
           name= "MyPro"
           options={{
-            drawerLabel: 'Mis Proyectos',
-            title: 'Mis Proyectos',
-          }}
-        />
-        <Drawer.Screen
-          name= "NuevoProyecto"
-          options={{
-            drawerLabel: 'Nuevo Proyecto',
-            title: 'Nuevo Proyecto',
+            drawerLabel: 'Usuarios',
+            title: 'Usuarios',
           }}
         />
         <Drawer.Screen
@@ -47,8 +35,8 @@ export default function TabLayout() {
             title: 'Historial Donaciones',
           }}
         />
-      
       </Drawer>
+      <Button onPress={()=> navigation.navigate('index')}>Salir</Button>
       
     </GestureHandlerRootView>
   );
