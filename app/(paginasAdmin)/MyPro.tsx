@@ -127,8 +127,7 @@ export default function ProyectScreen() {
                             <Card.Title>{project.name}</Card.Title>
                             <Card.Divider />
                             <Card.Image source={{ uri: 'https://picsum.photos/200/300' }} />
-                            <Text>{project.estado}</Text>
-                            <Text>{project._id}</Text>
+                            <Text>Estado del Usuario: {project.estado}</Text>
                             <Card.Divider />
                             {project.estado === 'Activo' ? <Button onPress={desactivar}>Desactivar</Button> : <Button onPress={activar}>Activar</Button>}
                             <Card.Divider />
