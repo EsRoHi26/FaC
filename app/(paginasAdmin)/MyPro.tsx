@@ -35,7 +35,7 @@ export default function ProyectScreen() {
     const getProjects = async () => {
         setProjects([]);
         try {
-            const response = await fetch('http://10.0.2.2:9000/api/usuarios', {
+            const response = await fetch('https://fac-95ei.onrender.com/api/usuarios', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export default function ProyectScreen() {
 
     const activar = async () => {
         try {
-            fetch('http://10.0.2.2:9000/api/usuarios/act/' + s, {
+            fetch('https://fac-95ei.onrender.com/api/usuarios/act/' + s, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export default function ProyectScreen() {
 
     const desactivar = async () => {
         try {
-            fetch('http://10.0.2.2:9000/api/usuarios/des/' + s, {
+            fetch('https://fac-95ei.onrender.com/api/usuarios/des/' + s, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export default function ProyectScreen() {
     const borrar = async (user : Usuario) => {
         for (let i = 0; i < user.proyectoPropios.length; i++) {
             try {
-                fetch('http://10.0.2.2:9000/api/proyectos/' + user.proyectoPropios[i], {
+                fetch('https://fac-95ei.onrender.com/api/proyectos/' + user.proyectoPropios[i], {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export default function ProyectScreen() {
             }
         }
         try {
-            fetch('http://10.0.2.2:9000/api/usuarios/' + user._id, {
+            fetch('https://fac-95ei.onrender.com/api/usuarios/' + user._id, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,8 +127,7 @@ export default function ProyectScreen() {
                             <Card.Title>{project.name}</Card.Title>
                             <Card.Divider />
                             <Card.Image source={{ uri: 'https://picsum.photos/200/300' }} />
-                            <Text>{project.estado}</Text>
-                            <Text>{project._id}</Text>
+                            <Text>Estado del Usuario: {project.estado}</Text>
                             <Card.Divider />
                             {project.estado === 'Activo' ? <Button onPress={desactivar}>Desactivar</Button> : <Button onPress={activar}>Activar</Button>}
                             <Card.Divider />

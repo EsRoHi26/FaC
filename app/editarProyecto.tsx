@@ -55,7 +55,7 @@ const NuevoProyecto: React.FC = () => {
 
         console.log('Datos del proyecto a enviar:', nuevoProyecto);
         try {
-            const response = await fetch('http://10.0.2.2:9000/api/proyectos/' + id + '/' + correo + '/' + name, {
+            const response = await fetch('https://fac-95ei.onrender.com/api/proyectos/' + id + '/' + correo + '/' + name, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

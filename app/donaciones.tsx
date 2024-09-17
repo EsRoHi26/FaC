@@ -51,7 +51,7 @@ const NuevoProyecto: React.FC = () => {
         //console.log('Datos de la donacion a enviar:', nuevaDonacion);
         try {
             //validar que tenag el dinero
-            const responseUsuario = await fetch('http://10.0.2.2:9000/api/usuarios/correo/' + correo, {
+            const responseUsuario = await fetch('https://fac-95ei.onrender.com/api/usuarios/correo/' + correo, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ const NuevoProyecto: React.FC = () => {
             }
 
             //se trae el proyecto para tener los datos de este
-            const responseProyecto = await fetch('http://10.0.2.2:9000/api/proyectos/' + id, {
+            const responseProyecto = await fetch('https://fac-95ei.onrender.com/api/proyectos/' + id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const NuevoProyecto: React.FC = () => {
 
 
             //hace la donacion
-            const response = await fetch('http://10.0.2.2:9000/api/donaciones/'+responsable, {
+            const response = await fetch('https://fac-95ei.onrender.com/api/donaciones/'+responsable, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ const NuevoProyecto: React.FC = () => {
 
             let nuevoMonto = dineroDisponible - montoDonacion
 
-            const responseDinero = await fetch(`http://10.0.2.2:9000/api/usuarios/actualizarDinero/${correo}`, {
+            const responseDinero = await fetch(`https://fac-95ei.onrender.com/api/usuarios/actualizarDinero/${correo}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const NuevoProyecto: React.FC = () => {
 
 
             // actualizar el monto del proyecto
-            const responseProyecto2 = await fetch('http://10.0.2.2:9000/api/proyectos/actualizarMonto/' + id, {
+            const responseProyecto2 = await fetch('https://fac-95ei.onrender.com/api/proyectos/actualizarMonto/' + id, {
 
                 method: 'PUT',
                 headers: {
