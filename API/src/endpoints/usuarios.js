@@ -2,7 +2,7 @@ const express = require('express');
 const esquemaUsuario = require('../modelosDatos/usuario');
 const router = express.Router();
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey("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");
+sgMail.setApiKey("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");
 
 
 // Trae todos los usuarios

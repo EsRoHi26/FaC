@@ -5,7 +5,7 @@ const { ExplainVerbosity } = require('mongodb');
 const moment = require('moment');
 const router = express.Router();
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey("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");
+sgMail.setApiKey("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");
 const CircularJSON = require('circular-json');
 
 //crear proyecto
